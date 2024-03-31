@@ -16,29 +16,57 @@
  */
 package org.tondeurh.fr.jbcdump;
 
+import java.util.ArrayList;
+
 /**
- *
  * @author herve
  */
 public class byteCodeFF {
  
-byte[] magic; //u3
-byte[] minor_version; //u2
-byte[] major_version; //u2
-byte[] constant_pool_count; //u2
-String[] constant_pool; //cp_info constant_pool[constant_pool_count-1]
-byte[] access_flags; //u2
-byte[] this_class; //u2
-byte[] super_class; //u2
-byte[] interfaces_count; //u2
-String[] interfaces; //interfaces_info interfaces[interfaces_count]
-byte[] fields_count; //u2
-String[] fields; //field_info fields[fields_count] 
-byte[] methods_count; //u2
-String[] methods; //method_info methods[methods_count]
-byte[] attributes_count; //u2
-String[] attributes; //attribute_info attributes[attributes_count]
+private byte[] magic; //u4
+public final byte magic_size=4;
+private byte[] minor_version; //u2
+public final byte minor_version_size=2;
+private byte[] major_version; //u2
+public final byte major_version_size=2;
+private byte[] constant_pool_count; //u2
+public final byte constant_pool_count_size=2;
+private ArrayList<CP_info> constant_pool; //cp_info constant_pool[constant_pool_count-1]
+private byte[] access_flags; //u2
+public final byte access_flags_size=2;
+private byte[] this_class; //u2
+public final byte this_class_size=2;
+private byte[] super_class; //u2
+public final byte super_class_size=2;
+private byte[] interfaces_count; //u2
+public final byte interfaces_count_size=2;
+private ArrayList<Interfaces_info> interfaces; //interfaces_info interfaces[interfaces_count]
+private byte[] fields_count; //u2
+public final byte fields_count_size=2;
+private ArrayList<Fields_info> fields; //field_info fields[fields_count] 
+private byte[] methods_count; //u2
+public final byte methods_count_size=2;
+private ArrayList<Methods_info> methods; //method_info methods[methods_count]
+private byte[] attributes_count; //u2
+public final byte attributes_count_size=2;
+private ArrayList<Attribute_info> attributes; //attribute_info attributes[attributes_count]
 
+/************************
+ * Construire les listes
+ * des sections
+ ************************/
+    public byteCodeFF() {
+    constant_pool=new ArrayList<>();
+    interfaces=new ArrayList<>();
+    fields=new ArrayList<>();
+    methods=new ArrayList<>();
+    attributes=new ArrayList<>();
+    }
+
+    /******************************/
+    // queslques getters & setters
+     /*****************************/
+    
     public byte[] getMagic() {
         return magic;
     }
@@ -71,11 +99,11 @@ String[] attributes; //attribute_info attributes[attributes_count]
         this.constant_pool_count = constant_pool_count;
     }
 
-    public String[] getConstant_pool() {
+    public ArrayList<CP_info> getConstant_pool() {
         return constant_pool;
     }
 
-    public void setConstant_pool(String[] constant_pool) {
+    public void setConstant_pool(ArrayList<CP_info> constant_pool) {
         this.constant_pool = constant_pool;
     }
 
@@ -111,11 +139,11 @@ String[] attributes; //attribute_info attributes[attributes_count]
         this.interfaces_count = interfaces_count;
     }
 
-    public String[] getInterfaces() {
+    public ArrayList<Interfaces_info> getInterfaces() {
         return interfaces;
     }
 
-    public void setInterfaces(String[] interfaces) {
+    public void setInterfaces(ArrayList<Interfaces_info> interfaces) {
         this.interfaces = interfaces;
     }
 
@@ -127,11 +155,11 @@ String[] attributes; //attribute_info attributes[attributes_count]
         this.fields_count = fields_count;
     }
 
-    public String[] getFields() {
+    public ArrayList<Fields_info> getFields() {
         return fields;
     }
 
-    public void setFields(String[] fields) {
+    public void setFields(ArrayList<Fields_info> fields) {
         this.fields = fields;
     }
 
@@ -143,11 +171,11 @@ String[] attributes; //attribute_info attributes[attributes_count]
         this.methods_count = methods_count;
     }
 
-    public String[] getMethods() {
+    public ArrayList<Methods_info> getMethods() {
         return methods;
     }
 
-    public void setMethods(String[] methods) {
+    public void setMethods(ArrayList<Methods_info> methods) {
         this.methods = methods;
     }
 
@@ -159,11 +187,11 @@ String[] attributes; //attribute_info attributes[attributes_count]
         this.attributes_count = attributes_count;
     }
 
-    public String[] getAttributes() {
+    public ArrayList<Attribute_info> getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(String[] attributes) {
+    public void setAttributes(ArrayList<Attribute_info> attributes) {
         this.attributes = attributes;
     }
     

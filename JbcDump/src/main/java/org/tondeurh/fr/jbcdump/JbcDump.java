@@ -36,16 +36,19 @@ import org.apache.commons.cli.ParseException;
  */
 public class JbcDump {
 
-    //bytecode de la classe
+    //bytecode de la classe 
+    //espace mémoire pour le chargement
     byte[] byteCodeClassMem;
     //les options de la CLI
     Options options = new Options();
+    
+    
     /***************
      * MAIN
      * @param args
      ***************/
     public static void main(String[] args) {
-        new JbcDump(args);
+        new JbcDump(args); //pas d'appel statiques
     }
 
     /******************
@@ -66,18 +69,29 @@ public class JbcDump {
                 .build();
         options.addOption(fichierClass);
         
-        //show Bytes
+        //show Bytes Permet d'afficher le fichier sous format octets
+        //selon une largeur d'octet au choix de l'utilisateur.
+        //bloquer a max 64
         Option showByte=Option.builder("sb")
                 .hasArg(false)
-                .desc("Afficher les octets sur l'écran.")
+                .desc("Afficher les octets sur l'écran, entre 8 et 64 octets de largeur.")
                 .required(true)
                 .numberOfArgs(1)
                 .argName("nbbytes")
                 .build();
         options.addOption(showByte);
         
+        //decompiler la classe 
+        Option decompiler=Option.builder("d")
+                .hasArg(false)
+                .desc("Decompiler la classe.")
+                .required(true)
+                .numberOfArgs(0)
+                .build();
+        options.addOption(decompiler);
         
-        //traiter ligne de commande
+        
+        //traiter la ligne de commande
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
           
@@ -89,22 +103,28 @@ public class JbcDump {
         
         if (cmd.hasOption("sb"))
             {
-                int nb=Integer.parseInt(cmd.getOptionValue("sb"),10);
-                showBytes(nb);
+                int nbOctets=Integer.parseInt(cmd.getOptionValue("sb"),10);
+                if (nbOctets>64) exitAndHelp("Largeur de l'affichage en octets trop large, réduite la valeur");
+                if (nbOctets<8) exitAndHelp("Largeur de l'affichage en octets trop étroit, réduite la valeur");
+                //ok on affiche...
+                showBytes(nbOctets);
             }
           
+        if (cmd.hasOption("d"))
+            {
+                //decoder le fichier class
+                Decoder decoder=new Decoder(byteCodeClassMem);
+                if (!testMagicNumber(decoder.getFileMagicNumber()))
+                {
+                    exitAndHelp("Ce n'est pas le bon format de fichier...");
+                }
+                //ok decode le fichier...
+                decoder.decodeClassFile();
+            }
         
-        //decoder le fichier class
-        Decoder decoder=new Decoder(byteCodeClassMem);
-        if (!testMagicNumber(decoder.getFileMagicNumber()))
-        {
-            exitAndHelp("Ce n'est pas le bon format de fichier...");
-        }
-        //ok decode le fichier...
-        decoder.decodeClassFile();
         
         } catch (ParseException ex) {
-             //DEFAUT
+             //DEFAUT : une erreur s'est produite.
             exitAndHelp(ex.getMessage());
         }
     }
@@ -116,7 +136,7 @@ public class JbcDump {
      ****************/
     public JbcDump(String[] args) 
     {
-        ligneOptions(args);
+        ligneOptions(args); //appeler la ligne d'options de la CLI
     }
     
     /************************************
@@ -136,9 +156,9 @@ public class JbcDump {
         try {
             //TODO
             dis = new DataInputStream(new FileInputStream(path));
-            System.out.println("Upload in memory : "+path);
+            System.out.println("Chargement en memoire : "+path);
             byteCodeClassMem=dis.readAllBytes();
-            System.out.println("Bycode Size : "+byteCodeClassMem.length+" octets");
+            System.out.println("Taille du byteCode lu : "+byteCodeClassMem.length+" octets");
         } catch (FileNotFoundException ex) {
             exitAndHelp(ex.getMessage());
         } catch (IOException ex) {
@@ -169,8 +189,7 @@ public class JbcDump {
     *************************************/
     private void syntaxe() {
         HelpFormatter hp=new HelpFormatter();
-        hp.printHelp("XXXX", "Options :", options, "------------------", true);
-        
+        hp.printHelp("XXXX", "Options :", options, "------------------", true);  
     }
 
     /******************************
@@ -181,9 +200,11 @@ public class JbcDump {
         String result="";
         for (i=0; i < byteCodeClassMem.length; i++) 
         {
+            //affichage du compteur d'octets
             if ((i % nbbytes)==0){System.out.println(result);result=formatBCCounter(i,12)+" : ";}
+            //construire chaque lignes
             result += Integer.toString((byteCodeClassMem[i] & 0xff)+0x100,16)
-                    .substring( 1 )+" ";
+                    .substring( 1 )+" "; //espace séparateur entre chaque octet
         }
         System.out.println(result);
     }
@@ -196,7 +217,7 @@ public class JbcDump {
      **********************/
     private String formatBCCounter(int i,int size) {
     StringBuilder sb = new StringBuilder();
-    for(int cpt=0; cpt<size; cpt++){sb.append("0");}
+    for(int cpt=0; cpt<size; cpt++){sb.append("0");} //bourae de 0 par la gauche
      String chaine=sb.toString()+Integer.toString(i, 10);
      int len=chaine.length();
      chaine=chaine.substring(len-size);
