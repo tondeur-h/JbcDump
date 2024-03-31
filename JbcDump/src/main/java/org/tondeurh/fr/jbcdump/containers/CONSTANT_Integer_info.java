@@ -14,12 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump;
+package org.tondeurh.fr.jbcdump.containers;
 
 /**
- *
+ * u4 bytes
  * @author herve
  */
-class Fields_info {
-    
+public class CONSTANT_Integer_info {
+
+private byte[] bytes;
+private int ibytes;
+public byte bytes_size=4;    
+
+    public byte[] getBytes() {
+        return bytes;
+    }
+
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
+    }
+
+    public int getIbytes() {
+        return ibytes;
+    }
+
+    public void setIbytes(int ibytes) {
+        this.ibytes = ibytes;
+    }
+
 }

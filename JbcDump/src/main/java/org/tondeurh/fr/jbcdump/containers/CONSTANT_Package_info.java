@@ -14,12 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump;
+package org.tondeurh.fr.jbcdump.containers;
 
 /**
  *
  * @author herve
  */
-class Interfaces_info {
-    
+public class CONSTANT_Package_info {
+
+private byte[] name_index;
+private int iname_index;
+public byte name_index_size=2;    
+
+    public byte[] getName_index() {
+        return name_index;
+    }
+
+    public void setName_index(byte[] name_index) {
+        this.name_index = name_index;
+    }
+
+    public int getIname_index() {
+        return iname_index;
+    }
+
+    public void setIname_index(int iname_index) {
+        this.iname_index = iname_index;
+    }
 }

@@ -14,12 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump;
+package org.tondeurh.fr.jbcdump.containers;
 
 /**
- *
+ * u2 string_index
  * @author herve
  */
-class Methods_info {
-    
+public class CONSTANT_String_info {
+
+private byte[] string_index;
+private int istring_index;
+public byte string_index_size=2;    
+
+    public byte[] getString_index() {
+        return string_index;
+    }
+
+    public void setString_index(byte[] string_index) {
+        this.string_index = string_index;
+    }
+
+    public int getIstring_index() {
+        return istring_index;
+    }
+
+    public void setIstring_index(int istring_index) {
+        this.istring_index = istring_index;
+    }
+
 }

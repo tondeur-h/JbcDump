@@ -16,6 +16,7 @@
  */
 package org.tondeurh.fr.jbcdump;
 
+import org.tondeurh.fr.jbcdump.containers.byteCodeFF;
 import java.nio.charset.StandardCharsets;
 
 /****************
@@ -26,7 +27,7 @@ public class Decoder {
     
     static byte[] gbcm; 
     byteCodeFF bcFF=new byteCodeFF();
-    int pc=0;
+    int pc=0; //index de position dans le fichier.
 
     /***************
      * CONSTRUCTEUR

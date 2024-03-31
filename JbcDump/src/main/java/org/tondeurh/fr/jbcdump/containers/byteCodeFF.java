@@ -14,8 +14,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump;
+package org.tondeurh.fr.jbcdump.containers;
 
+import org.tondeurh.fr.jbcdump.containers.Attribute_info;
+import org.tondeurh.fr.jbcdump.containers.Interfaces_info;
+import org.tondeurh.fr.jbcdump.containers.Methods_info;
+import org.tondeurh.fr.jbcdump.containers.Fields_info;
+import org.tondeurh.fr.jbcdump.containers.CP_info;
 import java.util.ArrayList;
 
 /**
