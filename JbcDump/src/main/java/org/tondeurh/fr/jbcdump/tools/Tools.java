@@ -16,6 +16,8 @@
  */
 package org.tondeurh.fr.jbcdump.tools;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  *
  * @author tondeur-h
@@ -52,6 +54,7 @@ public class Tools {
      * Conflagsertir le format 
      * numerique access_flags
      * des attributes en String
+     * @param flags
      * @return 
      ********************/
     public String Attributes_ACFTab(int flags) {
@@ -102,12 +105,21 @@ public class Tools {
      * @param major_version
      * @return 
      **************************/
-    public int Integ(byte[] major_version) {
+    public int Int(byte[] major_version) {
          int value = 0;
          for (byte b : major_version) {value = (value << 8) + (b & 0xFF);}
          return value;
     }
 
+     /**************************
+     * convertir bytes to String
+     * @param str
+     * @return 
+     **************************/
+    public String Str(byte[] str) {
+       return new String(str,StandardCharsets.UTF_8);
+    }
+    
     /********************************
      * Table de conversion version majeure
      * @param major_version
@@ -115,7 +127,7 @@ public class Tools {
      *********************************/
     public String MVTab(byte[] major_version) {
         String result;
-       int value =Integ(major_version);
+       int value =Int(major_version);
     switch (value){
         case 45 -> result="Major version 45 : (1.1) February 1997 support V45 only";
         case 46 -> result="Major version 46 : (1.2) December 1998 support V45 to V46";
@@ -148,6 +160,7 @@ public class Tools {
      * Convertir le format 
      * numerique access_flags
      * des attributes en String
+     * @param flags
      * @return 
      ********************/
     public String Methodes_ACMTab(int flags) {
@@ -184,6 +197,7 @@ public class Tools {
 
     /*******************
      * Get Next size bytes
+     * @param size
      * @return 
      *******************/
     public byte[] getNextBytes(int size){

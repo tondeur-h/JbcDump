@@ -29,7 +29,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.tondeurh.fr.jbcdump.tools.Tools;
 
 /**
  *
@@ -74,9 +73,9 @@ public class JbcDump {
         //selon une largeur d'octet au choix de l'utilisateur.
         //bloquer a max 64
         Option showByte=Option.builder("sb")
-                .hasArg(false)
+                .hasArg(true)
                 .desc("Afficher les octets sur l'écran, entre 8 et 64 octets de largeur.")
-                .required(true)
+                .required(false)
                 .numberOfArgs(1)
                 .argName("nbbytes")
                 .build();
@@ -86,7 +85,7 @@ public class JbcDump {
         Option decompiler=Option.builder("d")
                 .hasArg(false)
                 .desc("Decompiler la classe.")
-                .required(true)
+                .required(false)
                 .numberOfArgs(0)
                 .build();
         options.addOption(decompiler);
@@ -186,7 +185,7 @@ public class JbcDump {
     *************************************/
     private void syntaxe() {
         HelpFormatter hp=new HelpFormatter();
-        hp.printHelp("XXXX", "Options :", options, "------------------", true);  
+        hp.printHelp(this.getClass().getSimpleName(), "Options :", options, "------------------", true);  
     }
 
     /******************************

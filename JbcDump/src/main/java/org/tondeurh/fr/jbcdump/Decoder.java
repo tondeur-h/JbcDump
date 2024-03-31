@@ -19,7 +19,24 @@ package org.tondeurh.fr.jbcdump;
 import org.tondeurh.fr.jbcdump.containers.ClassFile;
 import java.nio.charset.StandardCharsets;
 import org.tondeurh.fr.jbcdump.tools.Tools;
-
+import org.tondeurh.fr.jbcdump.containers.CP_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Class_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Double_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Dynamic_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Fieldref_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Float_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Integer_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_InterfaceMethodref_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_InvokeDynamic_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Long_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_MethodHandle_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_MethodType_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Methodref_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Module_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_NameAndType_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Package_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_String_info;
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Utf8_info;
 /****************
  *
  * @author herve
@@ -27,7 +44,7 @@ import org.tondeurh.fr.jbcdump.tools.Tools;
 public class Decoder {
     
     ClassFile classFile;
-    Tools tools;
+    Tools t;
 
     /***************
      * CONSTRUCTEUR
@@ -35,7 +52,7 @@ public class Decoder {
      ***************/
     public Decoder(byte[] bcm) {
     classFile=new ClassFile();
-    tools=new Tools(bcm);
+    t=new Tools(bcm);
     }
    
     /************************
@@ -45,27 +62,27 @@ public class Decoder {
     public void decodeClassFile()
     {
         //recuperer le nombre magique du fichier...
-        classFile.setMagic(tools.getNextBytes(4));
+        classFile.setMagic(t.getNextBytes(4));
         //tester le nbre magique avant de continuer est ce le bon format?
-                if (!tools.testMagicNumber(tools.Hex(classFile.getMagic(),false,false)))
+                if (!t.testMagicNumber(t.Hex(classFile.getMagic(),false,false)))
                 {
-                    tools.exit("Ce n'est pas le bon format de fichier...");
+                    t.exit("Ce n'est pas le bon format de fichier...");
                 }
         
         //decode les versions major et minor
-        classFile.setMinor_version(tools.getNextBytes(2));//4-5
-        classFile.setMajor_version(tools.getNextBytes(2));//6-7
+        classFile.setMinor_version(t.getNextBytes(2));//4-5
+        classFile.setMajor_version(t.getNextBytes(2));//6-7
         
         //nb of constant pool string ?
-        classFile.setConstant_pool_count(tools.getNextBytes(2));//8-9
+        classFile.setConstant_pool_count(t.getNextBytes(2));//8-9
         
-        System.out.println("Magic number : "+tools.Hex(classFile.getMagic(),false,true));
-        System.out.println("Major version : "+tools.Integ(classFile.getMajor_version()));
-        System.out.println(tools.MVTab(classFile.getMajor_version()));
-        System.out.println("Minor version : "+tools.Integ(classFile.getMinor_version()));
+        System.out.println("Magic number : "+t.Hex(classFile.getMagic(),false,true));
+        System.out.println("Major version : "+t.Int(classFile.getMajor_version()));
+        System.out.println(t.MVTab(classFile.getMajor_version()));
+        System.out.println("Minor version : "+t.Int(classFile.getMinor_version()));
         
         System.out.println("------------CONSTANTS POOL------------");
-        System.out.println("constant pool count : "+tools.Integ(classFile.getConstant_pool_count()));
+        System.out.println("constant pool count : "+t.Int(classFile.getConstant_pool_count()));
         
         //lire la table constant pool 
         constant_pool_read();
@@ -73,25 +90,25 @@ public class Decoder {
         
         System.out.println("------------------------");
         //access FLAGS
-        classFile.setAccess_flags(tools.getNextBytes(2));
-        System.out.println("Access FlagS : "+tools.AFTab(tools.Integ(classFile.getAccess_flags())));
+        classFile.setAccess_flags(t.getNextBytes(2));
+        System.out.println("Access FlagS : "+t.AFTab(t.Int(classFile.getAccess_flags())));
         
         //this class
-        classFile.setThis_class(tools.getNextBytes(2));
-        System.out.println("This Class : #"+tools.Integ(classFile.getThis_class()));
+        classFile.setThis_class(t.getNextBytes(2));
+        System.out.println("This Class : #"+t.Int(classFile.getThis_class()));
         
         //super class
-        classFile.setSuper_class(tools.getNextBytes(2));
-        System.out.println("Super Class : #"+tools.Integ(classFile.getSuper_class()));
+        classFile.setSuper_class(t.getNextBytes(2));
+        System.out.println("Super Class : #"+t.Int(classFile.getSuper_class()));
         
-        
+    /*    
         System.out.println("------------INTERFACES------------");
         //Interfaces count
-        classFile.setInterfaces_count(tools.getNextBytes(2));
-        System.out.println("interfaces count : "+tools.Integ(classFile.getInterfaces_count()));
+        classFile.setInterfaces_count(t.getNextBytes(2));
+        System.out.println("interfaces count : "+t.Int(classFile.getInterfaces_count()));
         
         //interfaces_info interfaces[interfaces_count];
-       if (tools.Integ(classFile.getInterfaces_count())>0)
+       if (t.Int(classFile.getInterfaces_count())>0)
        {
            interfaces_infos_read();
            interfaces_infos_print();
@@ -99,11 +116,11 @@ public class Decoder {
        
         System.out.println("------------FIELDS------------");
         //u2 fields_count;
-        classFile.setFields_count(tools.getNextBytes(2));
-        System.out.println("Fields count : "+tools.Integ(classFile.getFields_count()));
+        classFile.setFields_count(t.getNextBytes(2));
+        System.out.println("Fields count : "+t.Int(classFile.getFields_count()));
         
         //field_info fields[fields_count];
-        if (tools.Integ(classFile.getFields_count())>0)
+        if (t.Int(classFile.getFields_count())>0)
        {
            fields_infos_read();
            fields_infos_print();
@@ -111,11 +128,11 @@ public class Decoder {
         
         System.out.println("------------METHODS------------");
         //u2 methods_count;
-        classFile.setMethods_count(tools.getNextBytes(2));
-        System.out.println("Methods count : "+tools.Integ(classFile.getMethods_count()));
+        classFile.setMethods_count(t.getNextBytes(2));
+        System.out.println("Methods count : "+t.Int(classFile.getMethods_count()));
         
         //method_info methods[methods_count];
-        if (tools.Integ(classFile.getMethods_count())>0)
+        if (t.Int(classFile.getMethods_count())>0)
        {
            methods_infos_read();
            methods_infos_print();
@@ -123,93 +140,107 @@ public class Decoder {
 
         System.out.println("------------ATTRIBUTES------------");
         //u2 attributes_count;
-        classFile.setAttributes_count(tools.getNextBytes(2));
-        System.out.println("Attributes count : "+tools.Integ(classFile.getAttributes_count()));
+        classFile.setAttributes_count(t.getNextBytes(2));
+        System.out.println("Attributes count : "+t.Int(classFile.getAttributes_count()));
 
         //attribute_info attributes[attributes_count];
-        if (tools.Integ(classFile.getAttributes_count())>0)
+        if (t.Int(classFile.getAttributes_count())>0)
        {
            atributes_infos_read();
        }
-        
+     */   
      ////////////////////////
        System.exit(0);
      ///////////////////////
+     
     }
                  
     /***************************
      * Lire la table constant pool
      ***************************/
     private void constant_pool_read() {
-        
-        String typecp="";
-        String stringcp="";
-        //alloc array constant_pool_strings
-        String[] constant_pool_tab=new String[tools.Integ(classFile.getConstant_pool_count())-1];
-        
-    for (int count_pool=0;count_pool<tools.Integ(classFile.getConstant_pool_count())-1;count_pool++)
+          
+    for (int count_pool=0;count_pool<t.Int(classFile.getConstant_pool_count())-1;count_pool++)
     {
-       //lire le tag
-        int tag=tools.Integ(tools.getNextBytes(1));
-        switch(tag)
+        //alloc array constant_pool object
+        CP_info cp_info=new CP_info(); 
+        //lire le tag
+        cp_info.setTag(t.getNextBytes(cp_info.tag_size));
+        cp_info.setItag(t.Int(cp_info.getTag()));
+        switch(cp_info.getItag())
         {
             case 7 -> {
-                typecp="CONSTANT_Class";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Class");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 9 -> {
-                typecp="CONSTANT_Fieldref";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Fieldref");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 10 -> {
-                typecp="CONSTANT_Methodref";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Methodref");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 11 -> {
-                typecp="CONSTANT_InterfaceMethodref";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_InterfaceMethodref");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 8 -> {
-                typecp="CONSTANT_String";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_String");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 3 -> {
-                typecp="CONSTANT_tools.Integer";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_tools.Integer");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 4 -> {
-                typecp="CONSTANT_Float";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Float");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 5 -> {
-                typecp="CONSTANT_Long";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Long");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 6 -> {
-                typecp="CONSTANT_Double";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Double");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 12 -> {
-                typecp="CONSTANT_NameAndType";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_NameAndType");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 1 -> {
-                typecp="CONSTANT_Utf8";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Utf8");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 15 -> {
-                typecp="CONSTANT_MethodHandle";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_MethodHandle");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 16 -> {
-                typecp="CONSTANT_MethodType";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_MethodType");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 17 -> {
-                typecp="CONSTANT_Dynamic";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Dynamic");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 18 -> {
-                typecp="CONSTANT_InvokeDynamic";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_InvokeDynamic");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 19 -> {
-                typecp="CONSTANT_Module";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Module");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 20 -> {
-                typecp="CONSTANT_Package";stringcp=call_constant(tag);
+                cp_info.setConstant_name("CONSTANT_Package");//afecter le type de cp_info
+                cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
         }
-     
-       constant_pool_tab[count_pool]="#"+(count_pool+1)+":"+typecp+" : "+stringcp;
-        
-    }
-    classFile.setConstant_pool(constant_pool_tab);
+
+        classFile.getConstant_pool().add(cp_info);
+    } //fin for
     }
 
     /******************************
@@ -218,275 +249,172 @@ public class Decoder {
      * @param typecp
      * @return 
      ******************************/
-    private String call_constant(int typecp) {
-    String result="";
+    private Object call_constant(int typecp) {
+    //String result="";
     
         switch (typecp)
         {
-            case 7->{ //CONSTANT_Class_info {u1 tag;u2 name_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2));
+            case 7->{ //CONSTANT_Class_info {u2 name_index;}
+                        CONSTANT_Class_info cci=new CONSTANT_Class_info();
+                        cci.setName_index(t.getNextBytes(2));
+                        cci.setIname_index(t.Int(cci.getName_index()));
+                        return cci;
                     }      
-            case 1->{ //CONSTANT_Utf8_info {u1 tag;u2 length;u1 bytes[length];}
-                        int lenstr=tools.Integ(tools.getNextBytes(2));
-                        result=new String(tools.getNextBytes(lenstr), StandardCharsets.UTF_8);
+            case 1->{ //CONSTANT_Utf8_info {u2 length;u1 bytes[length];}
+                        CONSTANT_Utf8_info cci=new CONSTANT_Utf8_info();
+                        //recup length
+                        cci.setLength(t.getNextBytes(cci.length_size));
+                        cci.setIlength(t.Int(cci.getLength()));
+                        //recup String
+                        cci.setBytesString(t.getNextBytes(cci.getIlength()));
+                        cci.setSbytesString(t.Str(cci.getBytesString()));
+                        return cci;
                     }  
-            case 10->{ //CONSTANT_Methodref_info {u1 tag;u2 class_index;u2 name_and_type_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 10->{ //CONSTANT_Methodref_info {u2 class_index;u2 name_and_type_index;}
+                        CONSTANT_Methodref_info cci=new CONSTANT_Methodref_info();
+                        cci.setClass_index(t.getNextBytes(cci.class_index_size));
+                        cci.setIclass_index(t.Int(cci.getClass_index()));
+                        cci.setName_and_type_index(t.getNextBytes(cci.name_and_type_index_size));
+                        cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
+                        return cci;
                     } 
-            case 12->{ //CONSTANT_NameAndType_info {u1 tag;u2 name_index;u2 descriptor_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 12->{ //CONSTANT_NameAndType_info {u2 name_index;u2 descriptor_index;}
+                        result="#"+t.Int(t.getNextBytes(2))+"."+"#"+t.Int(t.getNextBytes(2));
                     } 
-            case 9->{ //CONSTANT_Fieldref_info {u1 tag;u2 class_index;u2 name_and_type_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 9->{ //CONSTANT_Fieldref_info {u2 class_index;u2 name_and_type_index;}
+                        result="#"+t.Int(t.getNextBytes(2))+"."+"#"+t.Int(t.getNextBytes(2));
                     } 
-            case 11->{ //CONSTANT_InterfaceMethodref_info {u1 tag;u2 class_index;u2 name_and_type_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 11->{ //CONSTANT_InterfaceMethodref_info {u2 class_index;u2 name_and_type_index;}
+                        result="#"+t.Int(t.getNextBytes(2))+"."+"#"+t.Int(t.getNextBytes(2));
                     } 
-            case 8->{ //CONSTANT_String_info {u1 tag;u2 string_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2));
+            case 8->{ //CONSTANT_String_info {u2 string_index;}
+                        result="#"+t.Int(t.getNextBytes(2));
                     } 
-            case 3->{ //CONSTANT_tools.Integer_info {u1 tag;u4 bytes;}
-                        result="I:"+tools.Integ(tools.getNextBytes(4));
+            case 3->{ //CONSTANT_tools.Integer_info {u4 bytes;}
+                        result="I:"+t.Int(t.getNextBytes(4));
                     } 
-            case 4->{ //CONSTANT_Float_info {u1 tag;u4 bytes;}
-                        result="F:"+tools.Integ(tools.getNextBytes(4));
+            case 4->{ //CONSTANT_Float_info {u4 bytes;}
+                        result="F:"+t.Int(t.getNextBytes(4));
                     }
-            case 5->{ //CONSTANT_Long_info {u1 tag;u4 high_bytes;u4 low_bytes;}
-                        result="L:hb"+tools.Integ(tools.getNextBytes(4))+"lb"+tools.Integ(tools.getNextBytes(4));
+            case 5->{ //CONSTANT_Long_info {u4 high_bytes;u4 low_bytes;}
+                        result="L:hb"+t.Int(t.getNextBytes(4))+"lb"+t.Int(t.getNextBytes(4));
                     }
-            case 6->{ //CONSTANT_Double_info {u1 tag;u4 high_bytes;u4 low_bytes;}
-                        result="D:hb"+tools.Integ(tools.getNextBytes(4))+"lb"+tools.Integ(tools.getNextBytes(4));
+            case 6->{ //CONSTANT_Double_info {u4 high_bytes;u4 low_bytes;}
+                        result="D:hb"+t.Int(t.getNextBytes(4))+"lb"+t.Int(t.getNextBytes(4));
                     }
-            case 15->{ //CONSTANT_MethodHandle_info {u1 tag;u1 reference_kind;u2 reference_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(1))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 15->{ //CONSTANT_MethodHandle_info {u1 reference_kind;u2 reference_index;}
+                        result="#"+t.Int(t.getNextBytes(1))+"."+"#"+t.Int(t.getNextBytes(2));
                     }
-            case 16->{ //CONSTANT_MethodType_info {u1 tag;u2 descriptor_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2));
+            case 16->{ //CONSTANT_MethodType_info {u2 descriptor_index;}
+                        CONSTANT_MethodType_info cci=new CONSTANT_MethodType_info();
+                        cci.setDescriptor_index(t.getNextBytes(cci.descriptor_index_size));
+                        cci.setIdescriptor_index(t.Int(cci.getDescriptor_index()));
+                        return cci;
                     }
-            case 17->{ //CONSTANT_Dynamic_info {u1 tag;u2 bootstrap_method_attr_index;u2 name_and_type_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 17->{ //CONSTANT_Dynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
+                        result="#"+t.Int(t.getNextBytes(2))+"."+"#"+t.Int(t.getNextBytes(2));
                     }
-            case 18->{ //CONSTANT_InvokeDynamic_info {u1 tag;u2 bootstrap_method_attr_index;u2 name_and_type_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2))+"."+"#"+tools.Integ(tools.getNextBytes(2));
+            case 18->{ //CONSTANT_InvokeDynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
+                        result="#"+t.Int(t.getNextBytes(2))+"."+"#"+t.Int(t.getNextBytes(2));
                     }
-            case 19->{ //CONSTANT_Module_info {u1 tag;u2 name_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2));
+            case 19->{ //CONSTANT_Module_info {u2 name_index;}
+                        CONSTANT_Module_info cci=new CONSTANT_Module_info();
+                        cci.setName_index(t.getNextBytes(cci.name_index_size));
+                        cci.setIname_index(t.Int(cci.getName_index()));
+                        return cci;
                     }
-            case 20->{ //CONSTANT_Package_info {u1 tag;u2 name_index;}
-                        result="#"+tools.Integ(tools.getNextBytes(2));
+            case 20->{ //CONSTANT_Package_info {u2 name_index;}
+                        CONSTANT_Package_info cci=new CONSTANT_Package_info();
+                        cci.setName_index(t.getNextBytes(cci.name_index_size));
+                        cci.setIname_index(t.Int(cci.getName_index()));
+                        return cci;
                     }
+
         }
 
-        return result;
+        return null;
     }
 
     /*****************
      * Print constant pool
      *****************/
     private void constant_pool_print() {
-         for (String str:classFile.getConstant_pool()) {System.out.println(str);}
-    }
-   
-
-    /***********************
-     * Print interfaces infos
-     * String
-     ***********************/
-    private void interfaces_infos_print() {
-         for (String str:classFile.getInterfaces()) {System.out.println(str);}
-    }
-
-    /**************************
-     * alimenter le tableau
-     * des interfaces_infos.
-     **************************/
-    private void interfaces_infos_read() {
-        //must be a CONSTANT_Class_Info <=> Tag=7
+        for (CP_info cp_info:classFile.getConstant_pool())
+        {
+            //afficher le niveau cp_info
+            System.out.print("#tag type : "+cp_info.getItag()+" ("+t.Hex(cp_info.getTag(), false, true)+")");
+            System.out.println(" : "+cp_info.getConstant_name());
+            
+            //afficher le contenu selon le type d'objet.
+            if (cp_info.getContainer() instanceof CONSTANT_Class_info)
+            {
+               
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Double_info)
+            {
                 
-        String typeii="";
-        String stringii="";
-        //alloc array constant_pool_strings
-        String[] interfaces_infos_tab=new String[tools.Integ(classFile.getInterfaces_count())];
-        
-    for (int count_pool=0;count_pool<tools.Integ(classFile.getInterfaces_count());count_pool++)
-    {
-       //lire le tag
-        int tag=tools.Integ(tools.getNextBytes(1));
-        switch(tag)
-        {
-            case 7 -> {
-                typeii="CONSTANT_Class";stringii=call_constant(tag);
-                }
-        }
-       interfaces_infos_tab[count_pool]="#"+(count_pool+1)+":"+typeii+" : "+stringii;
-    }
-    classFile.setInterfaces(interfaces_infos_tab);
-    }
-
-    /**************************
-     * alimenter le tableau
-     * des fields_infos.
-     **************************/
-    private void fields_infos_read() {
-        String[] fields=new String[tools.Integ(classFile.getFields_count())];//initier le tableau des fields
-        
-        for (int count_fields=0;count_fields<tools.Integ(classFile.getFields_count());count_fields++)
-        {
-        /*
-        field_info {
-            u2 access_flags;
-            u2 name_index;
-            u2 descriptor_index;
-            u2 attributes_count;
-            attribute_info attributes[attributes_count];
-        }*/
-
-        //convertir access_flags
-        String access_flags_str=tools.Attributes_ACFTab(tools.Integ(tools.getNextBytes(2)));
-        int name_index=tools.Integ(tools.getNextBytes(2));
-        int descriptor_index=tools.Integ(tools.getNextBytes(2));
-        int attributes_count=tools.Integ(tools.getNextBytes(2));
-        
-        //attribute_info attributes[attributes_count]
-        //TODO a revoir...
-        String attributes_infos_str=iterate_attributes(attributes_count);
-        
-        fields[count_fields]=access_flags_str+
-                "#"+name_index+" "+extract_constant_pool_value(name_index)+"\r\n"+
-                "#"+descriptor_index+" "+extract_constant_pool_value(descriptor_index)+"\r\n"+
-                "["+attributes_infos_str+"]";
-        }
-        classFile.setFields(fields);
-    }
-
-    /***********************
-     * Print fields infos
-     * String
-     ***********************/
-    private void fields_infos_print() {
-        for (String str:classFile.getFields()) {System.out.println(str);}
-    }
-
-    /**************************
-     * alimenter le tableau
-     * des methods_infos.
-     **************************/
-    private void methods_infos_read() {
-          String[] methods=new String[tools.Integ(classFile.getMethods_count())];//initier le tableau des methods
-        
-        for (int count_methods=0;count_methods<tools.Integ(classFile.getMethods_count());count_methods++)
-        {
-        /*method_info {
-			u2 access_flags;
-			u2 name_index;
-			u2 descriptor_index;
-			u2 attributes_count;
-			attribute_info attributes[attributes_count];
-		}*/
-        //convertir access_flags
-        String access_flags_str=tools.Methodes_ACMTab(tools.Integ(tools.getNextBytes(2)));
-        int name_index=tools.Integ(tools.getNextBytes(2));
-        int descriptor_index=tools.Integ(tools.getNextBytes(2));
-        int attributes_count=tools.Integ(tools.getNextBytes(2));
-        
-        //attribute_info attributes[attributes_count]
-        String attributes_infos_str=iterate_attributes(attributes_count);
-        
-        methods[count_methods]=access_flags_str+"\r\n"+
-                "#"+name_index+" "+extract_constant_pool_value(name_index)+"\r\n"+
-                "#"+descriptor_index+" "+extract_constant_pool_value(descriptor_index)+"\r\n"+
-                attributes_infos_str;
-        }
-        classFile.setMethods(methods);
-    }
-
-    /***********************
-     * Print methods infos
-     * String
-     ***********************/
-    private void methods_infos_print() {
-        for (String str:classFile.getMethods()) {System.out.println(str);}
-    }
-
-    /**************************
-     * alimenter le tableau
-     * des attributes_infos.
-     **************************/
-    private void atributes_infos_read() {
-        System.out.println(iterate_attributes_end_file(tools.Integ(classFile.getAttributes_count())));
-    }
-   
-    /***************************
-     * Itterer dans le code des
-     * attributs (multi sources
-     * @param attributes_count
-     * @return 
-     ***************************/
-    private String iterate_attributes(int attributes_count) {
-      String result="";
-        /*
-	attribute_info {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1 info[attribute_length];
-	}
-        */
-        for (int attributes_count_counter=0;attributes_count_counter<attributes_count;attributes_count_counter++)
-        {
-        int attribute_name_index=tools.Integ(tools.getNextBytes(2));
-        int attribute_length=tools.Integ(tools.getNextBytes(4));
-        //get u1 info
-        String code=tools.Hex(tools.getNextBytes(attribute_length),true,true);
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Dynamic_info)
+            {
                 
-        result="#"+attribute_name_index+" "+extract_constant_pool_value(attribute_name_index)+
-        "["+code+"]";
-        }
-        return result;
-    }
-
-    /***************************
-     * Itterer dans le code des
-     * attributs (multi sources
-     * @param attributes_count
-     * @return 
-     ***************************/
-    private String iterate_attributes_end_file(int attributes_count) {
-      String result="";
-        /*
-	attribute_info {
-	u2 attribute_name_index;
-	u4 attribute_length;
-	u1 info[attribute_length];
-	}
-        */
-        for (int attributes_count_counter=0;attributes_count_counter<attributes_count;attributes_count_counter++)
-        {
-        int attribute_name_index=tools.Integ(tools.getNextBytes(2));
-        int attribute_length=tools.Integ(tools.getNextBytes(4));
-        //get u1 info
-        int code=tools.Integ(tools.getNextBytes(attribute_length));
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Fieldref_info)
+            {
                 
-        result="#"+attribute_name_index+".#"+code+"\r\n"+
-        extract_constant_pool_value(attribute_name_index)+" "+
-        extract_constant_pool_value(code);
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Float_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Integer_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_InterfaceMethodref_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_InvokeDynamic_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Long_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_MethodHandle_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_MethodType_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Methodref_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Module_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_NameAndType_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Package_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_String_info)
+            {
+                
+            }
+            if (cp_info.getContainer() instanceof CONSTANT_Utf8_info cONSTANT_Utf8_info)
+            {   
+                System.out.println(cONSTANT_Utf8_info.getSbytesString());
+            }
+           
         }
-        return result;
     }
-
-    
-    /******************************
-     * Extract vlaeur de CP
-     * @param index_constant_pool
-     * @return 
-     ******************************/
-    private String extract_constant_pool_value(int index_constant_pool)
-    {
-        String result;
-        String[] constant_pool=classFile.getConstant_pool();
-        
-        result=constant_pool[index_constant_pool-1];
-        
-        return result;
-    }
-    
 }

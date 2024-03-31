@@ -53,5 +53,14 @@ public byte name_and_type_index_size=2;
     public void setIname_and_type_index(int iname_and_type_index) {
         this.iname_and_type_index = iname_and_type_index;
     }
+
+    public byte[] getClass_index() {
+        return class_index;
+    }
+
+    public void setClass_index(byte[] class_index) {
+        this.class_index = class_index;
+    }
  
+    
 }

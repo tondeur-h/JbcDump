@@ -33,7 +33,7 @@ u1 tag;
 u1 info[];
 }
 */
-class CP_info {
+public class CP_info {
     
 private byte[] tag;
 private int itag;

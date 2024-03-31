@@ -32,7 +32,7 @@ u4 attribute_length;
 u1 info[attribute_length];
 }
 */
-class Attribute_info {
+public class Attribute_info {
 
 private byte[] name_index;
 private int iname_index;

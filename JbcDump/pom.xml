@@ -44,7 +44,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.12.1</version>
         <configuration>
-          <debug>false</debug>
+          <debug>true</debug>
+          <showDeprecation>true</showDeprecation>
         </configuration>
       </plugin>
     </plugins>
