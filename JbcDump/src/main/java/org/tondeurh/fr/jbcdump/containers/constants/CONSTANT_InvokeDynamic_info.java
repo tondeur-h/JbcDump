@@ -14,28 +14,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump.containers;
+package org.tondeurh.fr.jbcdump.containers.constants;
 
 /**
- *
- * u2 class_index;u2 name_and_type_index
+ * u2 bootstrap_method_attr_index;u2 name_and_type_index
  * @author herve
  */
-public class CONSTANT_Methodref_info {
+public class CONSTANT_InvokeDynamic_info {
 
-private byte[] class_index;
-private int iclass_index;
-public byte class_index_size=2;    
+private byte[] bootstrap_method_attr_index;
+private int ibootstrap_method_attr_index;
+public byte bootstrap_method_attr_index_size=2;    
 private byte[] name_and_type_index;
 private int iname_and_type_index;
-public byte name_and_type_index_size=2;
+public byte name_and_type_index_size=2; 
 
-    public int getIclass_index() {
-        return iclass_index;
+    public byte[] getBootstrap_method_attr_index() {
+        return bootstrap_method_attr_index;
     }
 
-    public void setIclass_index(int iclass_index) {
-        this.iclass_index = iclass_index;
+    public void setBootstrap_method_attr_index(byte[] bootstrap_method_attr_index) {
+        this.bootstrap_method_attr_index = bootstrap_method_attr_index;
+    }
+
+    public int getIbootstrap_method_attr_index() {
+        return ibootstrap_method_attr_index;
+    }
+
+    public void setIbootstrap_method_attr_index(int ibootstrap_method_attr_index) {
+        this.ibootstrap_method_attr_index = ibootstrap_method_attr_index;
     }
 
     public byte[] getName_and_type_index() {
@@ -53,5 +60,5 @@ public byte name_and_type_index_size=2;
     public void setIname_and_type_index(int iname_and_type_index) {
         this.iname_and_type_index = iname_and_type_index;
     }
- 
+   
 }

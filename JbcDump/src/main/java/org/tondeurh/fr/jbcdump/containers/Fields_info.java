@@ -16,51 +16,120 @@
  */
 package org.tondeurh.fr.jbcdump.containers;
 
-import org.tondeurh.fr.jbcdump.containers.CONSTANT_Class_info;
+import java.util.ArrayList;
 
 /**
  *
  * @author herve
  */
+
+/*
+each value in the fields table must be a field_info structure giving
+a complete description of a field in this class or interface. The fields table
+includes only those fields that are declared by this class or interface. It does
+not include items representing fields that are inherited from superclasses or
+superinterfaces.
+
+field_info {
+u2 access_flags;
+u2 name_index;
+u2 descriptor_index;
+u2 attributes_count;
+attribute_info attributes[attributes_count];
+}
+*/
 class Fields_info {
-private byte[] tag;
-private int itag;
-public byte tag_size=1;
-private String constant_name;
-private CONSTANT_Class_info container;
+private byte[] access_flags;
+private int iaccess_flags;
+public byte access_flags_size=2;
 
-//CONSTANT_Class              7   CONSTANT_Class_info {u2 name_index;}
+private byte[] name_index;
+private int iname_index;
+public byte name_index_size=2;
 
-    public Object getContainer() {
-        return container;
+private byte[] descriptor_index;
+private int idescriptor_index;
+public byte descriptor_index_size=2;
+
+private byte[] attributes_count;
+private int iattributes_count;
+public byte attributes_count_size=2;
+private ArrayList <Attribute_info> attributes;
+
+    public Fields_info() {
+        attributes=new ArrayList<>();
+    }
+    
+    public byte[] getAccess_flags() {
+        return access_flags;
     }
 
-    public void setContainer(CONSTANT_Class_info container) {
-        this.container = container;
+    public void setAccess_flags(byte[] access_flags) {
+        this.access_flags = access_flags;
     }
 
-    public byte[] getTag() {
-        return tag;
+    public int getIaccess_flags() {
+        return iaccess_flags;
     }
 
-    public void setTag(byte[] tag) {
-        this.tag = tag;
+    public void setIaccess_flags(int iaccess_flags) {
+        this.iaccess_flags = iaccess_flags;
     }
 
-    public int getItag() {
-        return itag;
+    public byte[] getName_index() {
+        return name_index;
     }
 
-    public void setItag(int itag) {
-        this.itag = itag;
+    public void setName_index(byte[] name_index) {
+        this.name_index = name_index;
     }
 
-    public String getConstant_name() {
-        return constant_name;
+    public int getIname_index() {
+        return iname_index;
     }
 
-    public void setConstant_name(String constant_name) {
-        this.constant_name = constant_name;
+    public void setIname_index(int iname_index) {
+        this.iname_index = iname_index;
+    }
+
+    public byte[] getDescriptor_index() {
+        return descriptor_index;
+    }
+
+    public void setDescriptor_index(byte[] descriptor_index) {
+        this.descriptor_index = descriptor_index;
+    }
+
+    public int getIdescriptor_index() {
+        return idescriptor_index;
+    }
+
+    public void setIdescriptor_index(int idescriptor_index) {
+        this.idescriptor_index = idescriptor_index;
+    }
+
+    public byte[] getAttributes_count() {
+        return attributes_count;
+    }
+
+    public void setAttributes_count(byte[] attributes_count) {
+        this.attributes_count = attributes_count;
+    }
+
+    public int getIattributes_count() {
+        return iattributes_count;
+    }
+
+    public void setIattributes_count(int iattributes_count) {
+        this.iattributes_count = iattributes_count;
+    }
+
+    public ArrayList<Attribute_info> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<Attribute_info> attributes) {
+        this.attributes = attributes;
     }
 
 }

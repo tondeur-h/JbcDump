@@ -14,14 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump.containers;
+package org.tondeurh.fr.jbcdump.containers.constants;
 
 /**
  *
  * u2 class_index;u2 name_and_type_index
  * @author herve
  */
-public class CONSTANT_Fieldref_info {
+public class CONSTANT_NameAndType_info {
 
 private byte[] class_index;
 private int iclass_index;

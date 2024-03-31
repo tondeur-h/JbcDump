@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump.containers;
+package org.tondeurh.fr.jbcdump.containers.constants;
 
 /**
  * u4 high_bytes;u4 low_bytes

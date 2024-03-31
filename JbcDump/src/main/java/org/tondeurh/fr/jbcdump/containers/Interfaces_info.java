@@ -16,10 +16,61 @@
  */
 package org.tondeurh.fr.jbcdump.containers;
 
+import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Class_info;
+
 /**
  *
  * @author herve
  */
+
+/*
+Each value in the interfaces array must be a valid index into
+the constant_pool table. The constant_pool entry at each value
+of interfaces[i], where 0 ≤ i < interfaces_count, must be a
+CONSTANT_Class_info structure representing an interface that is a direct
+superinterface of this class or interface type, in the left-to-right order given in
+the source for the type.
+*/
+
 class Interfaces_info {
-    
+ private byte[] tag;
+private int itag;
+public byte tag_size=1;
+private String constant_name;
+private CONSTANT_Class_info container;
+
+//CONSTANT_Class    7   CONSTANT_Class_info {u2 name_index;}
+
+    public Object getContainer() {
+        return container;
+    }
+
+    public void setContainer(CONSTANT_Class_info container) {
+        this.container = container;
+    }
+
+    public byte[] getTag() {
+        return tag;
+    }
+
+    public void setTag(byte[] tag) {
+        this.tag = tag;
+    }
+
+    public int getItag() {
+        return itag;
+    }
+
+    public void setItag(int itag) {
+        this.itag = itag;
+    }
+
+    public String getConstant_name() {
+        return constant_name;
+    }
+
+    public void setConstant_name(String constant_name) {
+        this.constant_name = constant_name;
+    }
+   
 }

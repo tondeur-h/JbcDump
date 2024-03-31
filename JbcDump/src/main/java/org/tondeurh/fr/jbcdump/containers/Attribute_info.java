@@ -16,10 +16,75 @@
  */
 package org.tondeurh.fr.jbcdump.containers;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author herve
  */
+/*
+Attributes are used in the ClassFile, field_info, method_info,
+Code_attribute, and record_component_info structures of the class file format.
+
+attribute_info {
+u2 attribute_name_index;
+u4 attribute_length;
+u1 info[attribute_length];
+}
+*/
 class Attribute_info {
-    
+
+private byte[] name_index;
+private int iname_index;
+public byte name_index_size=2;
+
+private byte[] attribute_length;
+private int iattribute_length;
+public byte attribute_length_size=4;
+private ArrayList <Byte> info;
+
+    public Attribute_info() {
+        info=new ArrayList<>();
+    }
+
+    public byte[] getName_index() {
+        return name_index;
+    }
+
+    public void setName_index(byte[] name_index) {
+        this.name_index = name_index;
+    }
+
+    public int getIname_index() {
+        return iname_index;
+    }
+
+    public void setIname_index(int iname_index) {
+        this.iname_index = iname_index;
+    }
+
+    public byte[] getAttribute_length() {
+        return attribute_length;
+    }
+
+    public void setAttribute_length(byte[] attribute_length) {
+        this.attribute_length = attribute_length;
+    }
+
+    public int getIattribute_length() {
+        return iattribute_length;
+    }
+
+    public void setIattribute_length(int iattribute_length) {
+        this.iattribute_length = iattribute_length;
+    }
+
+    public ArrayList<Byte> getInfo() {
+        return info;
+    }
+
+    public void setInfo(ArrayList<Byte> info) {
+        this.info = info;
+    }
+
 }

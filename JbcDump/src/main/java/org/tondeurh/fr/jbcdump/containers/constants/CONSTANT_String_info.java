@@ -14,32 +14,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump.containers;
+package org.tondeurh.fr.jbcdump.containers.constants;
 
 /**
- * u4 bytes
+ * u2 string_index
  * @author herve
  */
-public class CONSTANT_Float_info {
+public class CONSTANT_String_info {
 
-private byte[] bytes;
-private int ibytes;
-public byte bytes_size=4;    
+private byte[] string_index;
+private int istring_index;
+public byte string_index_size=2;    
 
-    public byte[] getBytes() {
-        return bytes;
+    public byte[] getString_index() {
+        return string_index;
     }
 
-    public void setBytes(byte[] bytes) {
-        this.bytes = bytes;
+    public void setString_index(byte[] string_index) {
+        this.string_index = string_index;
     }
 
-    public int getIbytes() {
-        return ibytes;
+    public int getIstring_index() {
+        return istring_index;
     }
 
-    public void setIbytes(int ibytes) {
-        this.ibytes = ibytes;
+    public void setIstring_index(int istring_index) {
+        this.istring_index = istring_index;
     }
 
 }

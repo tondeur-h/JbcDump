@@ -29,6 +29,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.tondeurh.fr.jbcdump.tools.Tools;
 
 /**
  *
@@ -114,10 +115,6 @@ public class JbcDump {
             {
                 //decoder le fichier class
                 Decoder decoder=new Decoder(byteCodeClassMem);
-                if (!testMagicNumber(decoder.getFileMagicNumber()))
-                {
-                    exitAndHelp("Ce n'est pas le bon format de fichier...");
-                }
                 //ok decode le fichier...
                 decoder.decodeClassFile();
             }
@@ -215,7 +212,7 @@ public class JbcDump {
      * @param size
      * @return 
      **********************/
-    private String formatBCCounter(int i,int size) {
+    public String formatBCCounter(int i,int size) {
     StringBuilder sb = new StringBuilder();
     for(int cpt=0; cpt<size; cpt++){sb.append("0");} //bourae de 0 par la gauche
      String chaine=sb.toString()+Integer.toString(i, 10);
@@ -224,13 +221,5 @@ public class JbcDump {
      return chaine;
     }
 
-    /*************************
-     * Test magic number from file
-     * @param fileMagicNumber
-     * @return 
-     ************************/
-    private boolean testMagicNumber(String fileMagicNumber) {
-        return fileMagicNumber.compareToIgnoreCase("cafebabe")==0; 
-    }
     
 }

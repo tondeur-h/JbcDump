@@ -16,10 +16,125 @@
  */
 package org.tondeurh.fr.jbcdump.containers;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author herve
  */
+/*
+Each value in the methods table must be a method_info structure giving
+a complete description of a method in this class or interface. If neither of the
+ACC_NATIVE and ACC_ABSTRACT flags are set in the access_flags item of a
+method_info structure, the Java Virtual Machine instructions implementing
+the method are also supplied.
+The method_info structures represent all methods declared by this class
+or interface type, including instance methods, class methods, instance
+initialization methods, and any class or interface initialization method.
+The methods table does not include items representing methods that are 
+inherited from superclasses or superinterfaces.
+*/
+/*
+method_info {
+u2 access_flags;
+u2 name_index;
+u2 descriptor_index;
+u2 attributes_count;
+attribute_info attributes[attributes_count];
+}
+*/
 class Methods_info {
+private byte[] access_flags;
+private int iaccess_flags;
+public byte access_flags_size=2;
+
+private byte[] name_index;
+private int iname_index;
+public byte name_index_size=2;
+
+private byte[] descriptor_index;
+private int idescriptor_index;
+public byte descriptor_index_size=2;
+
+private byte[] attributes_count;
+private int iattributes_count;
+public byte attributes_count_size=2;
+private ArrayList <Attribute_info> attributes;
+
+    public Methods_info() {
+        attributes=new ArrayList<>();
+    }
+
+    public byte[] getAccess_flags() {
+        return access_flags;
+    }
+
+    public void setAccess_flags(byte[] access_flags) {
+        this.access_flags = access_flags;
+    }
+
+    public int getIaccess_flags() {
+        return iaccess_flags;
+    }
+
+    public void setIaccess_flags(int iaccess_flags) {
+        this.iaccess_flags = iaccess_flags;
+    }
+
+    public byte[] getName_index() {
+        return name_index;
+    }
+
+    public void setName_index(byte[] name_index) {
+        this.name_index = name_index;
+    }
+
+    public int getIname_index() {
+        return iname_index;
+    }
+
+    public void setIname_index(int iname_index) {
+        this.iname_index = iname_index;
+    }
+
+    public byte[] getDescriptor_index() {
+        return descriptor_index;
+    }
+
+    public void setDescriptor_index(byte[] descriptor_index) {
+        this.descriptor_index = descriptor_index;
+    }
+
+    public int getIdescriptor_index() {
+        return idescriptor_index;
+    }
+
+    public void setIdescriptor_index(int idescriptor_index) {
+        this.idescriptor_index = idescriptor_index;
+    }
+
+    public byte[] getAttributes_count() {
+        return attributes_count;
+    }
+
+    public void setAttributes_count(byte[] attributes_count) {
+        this.attributes_count = attributes_count;
+    }
+
+    public int getIattributes_count() {
+        return iattributes_count;
+    }
+
+    public void setIattributes_count(int iattributes_count) {
+        this.iattributes_count = iattributes_count;
+    }
+
+    public ArrayList<Attribute_info> getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(ArrayList<Attribute_info> attributes) {
+        this.attributes = attributes;
+    }
     
 }

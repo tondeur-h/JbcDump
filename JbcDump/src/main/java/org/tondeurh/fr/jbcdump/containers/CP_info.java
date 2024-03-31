@@ -20,6 +20,19 @@ package org.tondeurh.fr.jbcdump.containers;
  *
  * @author herve
  */
+/*
+The constant_pool is a table of structures representing various string
+constants, class and interface names, field names, and other constants that are
+referred to within the ClassFile structure and its substructures. The format of
+each constant_pool table entry is indicated by its first "tag" byte.
+The constant_pool table is indexed from 1 to constant_pool_count - 1.
+*/
+/*
+cp_info {
+u1 tag;
+u1 info[];
+}
+*/
 class CP_info {
     
 private byte[] tag;
@@ -29,7 +42,7 @@ private String constant_name;
 private Object container;
 //selon le type de tag la valeur a collecter va changer
 /*
-constant_name               tag classe
+Ex  constant_name               tag classe
 X   CONSTANT_Utf8               1   CONSTANT_Utf8_info {u2 length;u1 bytes[length];}
 X   CONSTANT_Integer            3   CONSTANT_Integer_info {u4 bytes;}
 X   CONSTANT_Float              4   CONSTANT_Float_info {u4 bytes;}

@@ -14,32 +14,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.tondeurh.fr.jbcdump.containers;
+package org.tondeurh.fr.jbcdump.containers.constants;
 
 /**
  *
  * @author herve
  */
-public class CONSTANT_MethodType_info {
+public class CONSTANT_Package_info {
 
-private byte[] descriptor_index;
-private int idescriptor_index;
-public byte descriptor_index_size=2;    
+private byte[] name_index;
+private int iname_index;
+public byte name_index_size=2;    
 
-    public byte[] getDescriptor_index() {
-        return descriptor_index;
+    public byte[] getName_index() {
+        return name_index;
     }
 
-    public void setDescriptor_index(byte[] descriptor_index) {
-        this.descriptor_index = descriptor_index;
+    public void setName_index(byte[] name_index) {
+        this.name_index = name_index;
     }
 
-    public int getIdescriptor_index() {
-        return idescriptor_index;
+    public int getIname_index() {
+        return iname_index;
     }
 
-    public void setIdescriptor_index(int idescriptor_index) {
-        this.idescriptor_index = idescriptor_index;
+    public void setIname_index(int iname_index) {
+        this.iname_index = iname_index;
     }
-    
 }

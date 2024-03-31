@@ -16,17 +16,32 @@
  */
 package org.tondeurh.fr.jbcdump.containers;
 
-import org.tondeurh.fr.jbcdump.containers.Attribute_info;
-import org.tondeurh.fr.jbcdump.containers.Interfaces_info;
-import org.tondeurh.fr.jbcdump.containers.Methods_info;
-import org.tondeurh.fr.jbcdump.containers.Fields_info;
-import org.tondeurh.fr.jbcdump.containers.CP_info;
 import java.util.ArrayList;
 
 /**
  * @author herve
  */
-public class byteCodeFF {
+/*
+ClassFile {
+u4 magic;
+u2 minor_version;
+u2 major_version;
+u2 constant_pool_count;
+cp_info constant_pool[constant_pool_count-1];
+u2 access_flags;
+u2 this_class;
+u2 super_class;
+u2 interfaces_count;
+u2 interfaces[interfaces_count];
+u2 fields_count;
+field_info fields[fields_count];
+u2 methods_count;
+method_info methods[methods_count];
+u2 attributes_count;
+attribute_info attributes[attributes_count];
+}
+*/
+public class ClassFile {
  
 private byte[] magic; //u4
 public final byte magic_size=4;
@@ -60,7 +75,7 @@ private ArrayList<Attribute_info> attributes; //attribute_info attributes[attrib
  * Construire les listes
  * des sections
  ************************/
-    public byteCodeFF() {
+    public ClassFile() {
     constant_pool=new ArrayList<>();
     interfaces=new ArrayList<>();
     fields=new ArrayList<>();
