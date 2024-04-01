@@ -63,7 +63,8 @@ Tools t;
             for (Attribute_info ai:classFile.getAttributes())
             {
                 System.out.print(extract_constant_pool_value(ai.getIname_index())+" ");
-                System.out.println("["+t.Hex(ai.getInfo(), true, true)+"]");
+                //System.out.println("["+t.Hex(ai.getInfo(), true, true)+"]");
+                System.out.println(extract_constant_pool_info(t.Int(ai.getInfo())));
             }       
     }
                        
@@ -109,4 +110,14 @@ Tools t;
         return ((CONSTANT_Utf8_info)classFile.getConstant_pool().get(index_constant_pool-1).getContainer()).getSbytesString();
     }
    
+    /******************************
+     * Extract valeur de in
+     * @param index_constant_pool
+     * @return 
+     ******************************/
+    private String extract_constant_pool_info(int index_constant_pool)
+    {
+        return ((CONSTANT_Utf8_info)classFile.getConstant_pool().get(index_constant_pool-1).getContainer()).getSbytesString();
+    }
+    
 }
