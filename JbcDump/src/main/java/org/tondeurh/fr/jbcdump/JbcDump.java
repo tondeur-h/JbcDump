@@ -22,6 +22,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -29,6 +31,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.tondeurh.fr.jbcdump.tools.Tools;
 
 /**
  *
@@ -41,6 +44,7 @@ public class JbcDump {
     byte[] byteCodeClassMem;
     //les options de la CLI
     Options options = new Options();
+    Tools t;
     
     
     /***************
@@ -48,7 +52,7 @@ public class JbcDump {
      * @param args
      ***************/
     public static void main(String[] args) {
-        new JbcDump(args); //pas d'appel statiques
+        JbcDump jbcDump = new JbcDump(args); //pas d'appel statiques
     }
 
     /******************
@@ -99,6 +103,13 @@ public class JbcDump {
             {
                 String path=cmd.getOptionValue("f");
                 if (!chargerClasse(path)){exitAndHelp("Chemin de la classe incorrect. option f");}
+                else {
+                    t=new Tools(byteCodeClassMem);
+                    System.out.println("CHECKSUM MD5     : "+hashFileCode("MD5"));
+                    System.out.println("CHECKSUM SHA 1   : "+hashFileCode("SHA-1"));
+                    System.out.println("CHECKSUM SHA 256 : "+hashFileCode("SHA-256"));
+                    System.out.println("CHECKSUM SHA 512 : "+hashFileCode("SHA-512"));
+                } //la classeest chargée, creer le pack tools
             }
         
         if (cmd.hasOption("sb"))
@@ -113,7 +124,7 @@ public class JbcDump {
         if (cmd.hasOption("d"))
             {
                 //decoder le fichier class
-                Decoder decoder=new Decoder(byteCodeClassMem);
+                Decode decoder=new Decode(t);
                 //ok decode le fichier...
                 decoder.decodeClassFile();
             }
@@ -145,7 +156,7 @@ public class JbcDump {
         //verifier que le fichier existe
         if (!new File(path).exists())
         {
-            exitAndHelp("fichier "+path+" non trouvé.");
+            exitAndHelp("fichier "+path+" non trouvé. Verifiez le chemin!");
         }
         
         DataInputStream dis=null;
@@ -220,5 +231,19 @@ public class JbcDump {
      return chaine;
     }
 
+    /**
+     * calcule le HASH de l'encodage
+     * @param encodage
+     * @return
+     */
+    public String hashFileCode(String encodage){
+       byte[] hash = null; 
+       try {
+            MessageDigest digest = MessageDigest.getInstance(encodage);
+            hash = digest.digest(byteCodeClassMem);
+        } catch (NoSuchAlgorithmException ex) {
+          }
+        return t.Hex(hash, false, true);
+   }
     
 }

@@ -30,6 +30,14 @@ private byte[] name_and_type_index;
 private int iname_and_type_index;
 public byte name_and_type_index_size=2;
 
+    public byte[] getClass_index() {
+        return class_index;
+    }
+
+    public void setClass_index(byte[] class_index) {
+        this.class_index = class_index;
+    }
+
     public int getIclass_index() {
         return iclass_index;
     }

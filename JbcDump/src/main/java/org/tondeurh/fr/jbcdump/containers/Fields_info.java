@@ -38,7 +38,7 @@ u2 attributes_count;
 attribute_info attributes[attributes_count];
 }
 */
-class Fields_info {
+public class Fields_info {
 private byte[] access_flags;
 private int iaccess_flags;
 public byte access_flags_size=2;

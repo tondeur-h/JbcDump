@@ -16,8 +16,6 @@
  */
 package org.tondeurh.fr.jbcdump.containers;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author herve
@@ -41,10 +39,14 @@ public byte name_index_size=2;
 private byte[] attribute_length;
 private int iattribute_length;
 public byte attribute_length_size=4;
-private ArrayList <Byte> info;
+private byte[] info;
 
-    public Attribute_info() {
-        info=new ArrayList<>();
+    public byte[] getInfo() {
+        return info;
+    }
+
+    public void setInfo(byte[] info) {
+        this.info = info;
     }
 
     public byte[] getName_index() {
@@ -79,12 +81,5 @@ private ArrayList <Byte> info;
         this.iattribute_length = iattribute_length;
     }
 
-    public ArrayList<Byte> getInfo() {
-        return info;
-    }
-
-    public void setInfo(ArrayList<Byte> info) {
-        this.info = info;
-    }
 
 }

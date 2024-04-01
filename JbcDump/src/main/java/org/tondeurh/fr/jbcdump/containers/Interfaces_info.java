@@ -32,7 +32,7 @@ superinterface of this class or interface type, in the left-to-right order given
 the source for the type.
 */
 
-class Interfaces_info {
+public class Interfaces_info {
  private byte[] tag;
 private int itag;
 public byte tag_size=1;
@@ -41,7 +41,7 @@ private CONSTANT_Class_info container;
 
 //CONSTANT_Class    7   CONSTANT_Class_info {u2 name_index;}
 
-    public Object getContainer() {
+    public CONSTANT_Class_info getContainer() {
         return container;
     }
 

@@ -18,40 +18,50 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 
 /**
  *
- * u2 class_index;u2 name_and_type_index
+ * u2 name_index;u2 descriptor_index
  * @author herve
  */
 public class CONSTANT_NameAndType_info {
 
-private byte[] class_index;
-private int iclass_index;
-public byte class_index_size=2;    
-private byte[] name_and_type_index;
-private int iname_and_type_index;
-public byte name_and_type_index_size=2;
+private byte[] name_index;
+private int iname_index;
+public byte name_index_size=2;    
+private byte[] descriptor_index;
+private int idescriptor_index;
+public byte descriptor_index_size=2;
 
-    public int getIclass_index() {
-        return iclass_index;
+    public byte[] getName_index() {
+        return name_index;
     }
 
-    public void setIclass_index(int iclass_index) {
-        this.iclass_index = iclass_index;
+    public void setName_index(byte[] name_index) {
+        this.name_index = name_index;
     }
 
-    public byte[] getName_and_type_index() {
-        return name_and_type_index;
+    public int getIname_index() {
+        return iname_index;
     }
 
-    public void setName_and_type_index(byte[] name_and_type_index) {
-        this.name_and_type_index = name_and_type_index;
+    public void setIname_index(int iname_index) {
+        this.iname_index = iname_index;
     }
 
-    public int getIname_and_type_index() {
-        return iname_and_type_index;
+    public byte[] getDescriptor_index() {
+        return descriptor_index;
     }
 
-    public void setIname_and_type_index(int iname_and_type_index) {
-        this.iname_and_type_index = iname_and_type_index;
+    public void setDescriptor_index(byte[] descriptor_index) {
+        this.descriptor_index = descriptor_index;
     }
- 
+
+    public int getIdescriptor_index() {
+        return idescriptor_index;
+    }
+
+    public void setIdescriptor_index(int idescriptor_index) {
+        this.idescriptor_index = idescriptor_index;
+    }
+
+
+
 }

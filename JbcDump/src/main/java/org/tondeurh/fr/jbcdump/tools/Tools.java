@@ -117,7 +117,24 @@ public class Tools {
      * @return 
      **************************/
     public String Str(byte[] str) {
-       return new String(str,StandardCharsets.UTF_8);
+        String result="";
+        byte[] substr=new byte[1];
+        //pour chaque byte verfier si >=32
+        //=> chaine OK sinon en code U/XXXX
+        for (int b=0;b<str.length;b++)
+        {
+            if (str[b]<32)
+            {
+              System.arraycopy(str, b, substr, 0, 1);
+              result+="\\U00"+Hex(substr,false,true);  
+            }
+            else
+            {
+                System.arraycopy(str, b, substr, 0, 1);
+              result+=new String(substr,StandardCharsets.UTF_8);  
+            }
+        }
+       return result;
     }
     
     /********************************
