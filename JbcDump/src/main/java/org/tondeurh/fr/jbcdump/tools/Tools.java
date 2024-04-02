@@ -28,7 +28,7 @@ public class Tools {
     static byte[] gbcm; 
 
     public Tools(byte[] bcm) {
-    gbcm=bcm; //copier la mem class en globale
+    gbcm=bcm; //copier la mem class en globale dans cette class de manipulation
     }
     
     /***************************
@@ -36,7 +36,7 @@ public class Tools {
      * @param flags
      * @return 
      ***************************/
-    public String AFTab(int flags) {
+    public String Class_AFTab(int flags) {
         String result="";
         if ((flags & 0x8000)==0x8000) {result+="ACC_MODULE ";}
         if ((flags & 0x4000)==0x4000){result+="ACC_ENUM ";}
@@ -57,7 +57,7 @@ public class Tools {
      * @param flags
      * @return 
      ********************/
-    public String Attributes_ACFTab(int flags) {
+    public String Attributes_AFTab(int flags) {
         String result="";
         /*
         ACC_PUBLIC 0x0001
@@ -83,54 +83,55 @@ public class Tools {
     
     /**********************
      * convert vers hex string
-     * @param magic
+     * @param hexa
      * @param space
      * @param upcase
      * @return 
      **********************/
-    public String Hex(byte[] magic, boolean space,boolean upcase) {
+    public String Hex(byte[] hexa, boolean space,boolean upcase) {
         String result="";
-        for (int i=0; i < magic.length; i++) 
+        for (int i=0; i < hexa.length; i++) 
         {
-        result += Integer.toString((magic[i] & 0xff)+0x100,16)
+        result += Integer.toString((hexa[i] & 0xff)+0x100,16)
                     .substring( 1 );
-        if (space) result+=" ";
-        if (upcase) result=result.toUpperCase();
+        if (space) result+=" "; //si espace attendu
+        if (upcase) result=result.toUpperCase(); //si upercase attendu.
         }
         return result;
     }
 
     /**************************
      * convertir byte2 to Integer
-     * @param major_version
+     * @param hexa
      * @return 
      **************************/
-    public int Int(byte[] major_version) {
+    public int Int(byte[] hexa) {
          int value = 0;
-         for (byte b : major_version) {value = (value << 8) + (b & 0xFF);}
+         for (byte b : hexa) {value = (value << 8) + (b & 0xFF);}
          return value;
     }
 
      /**************************
      * convertir bytes to String
-     * @param str
+     * @param hexa
      * @return 
      **************************/
-    public String Str(byte[] str) {
+    public String Str(byte[] hexa) {
         String result="";
-        byte[] substr=new byte[1];
-        //pour chaque byte verfier si >=32
-        //=> chaine OK sinon en code U/XXXX
-        for (int b=0;b<str.length;b++)
+        byte[] substr=new byte[1]; //Pour chaque octet
+        //pour chaque octet verfier si >=32
+        //=> chaine ASCII OK sinon en code U/XXXX
+        //on construit la chaine octet/octet
+        for (int b=0;b<hexa.length;b++)
         {
-            if (str[b]<32)
-            {
-              System.arraycopy(str, b, substr, 0, 1);
-              result+="\\U00"+Hex(substr,false,true);  
+            if (hexa[b]<32)
+            { //c'est un caractère non affichable
+              System.arraycopy(hexa, b, substr, 0, 1);
+              result+="\\U00"+Hex(substr,false,true); //concat \\U00 avec val en Hexa ASCII  
             }
             else
-            {
-                System.arraycopy(str, b, substr, 0, 1);
+            { //c'est un caractere ASCII affichable
+              System.arraycopy(hexa, b, substr, 0, 1);
               result+=new String(substr,StandardCharsets.UTF_8);  
             }
         }
@@ -142,32 +143,32 @@ public class Tools {
      * @param major_version
      * @return 
      *********************************/
-    public String MVTab(byte[] major_version) {
+    public String Versions_VTab(byte[] major_version) {
         String result;
        int value =Int(major_version);
     switch (value){
-        case 45 -> result="Major version 45 : (1.1) February 1997 support V45 only";
-        case 46 -> result="Major version 46 : (1.2) December 1998 support V45 to V46";
-        case 47 -> result="Major version 47 : (1.3) May 2000 support V45 to V47";
-        case 48 -> result="Major version 48 : (1.4) February 2002 support V45 to V48";
-        case 49 -> result="Major version 49 : (5.0) September 2004 support V45 to V49";
-        case 50 -> result="Major version 50 : (6) December 2006 support V45 to V50";
-        case 51 -> result="Major version 51 : (7) July 2011 support V45 to V51";
-        case 52 -> result="Major version 52 : (8) March 2014 support V45 to V52";
-        case 53 -> result="Major version 53 : (9) September 2017 support V45 to V53";
-        case 54 -> result="Major version 54 : (10) March 2018 support V45 to V54";
-        case 55 -> result="Major version 55 : (11) September 2018 support V45 to V55";
-        case 56 -> result="Major version 56 : (12) March 2019 support V45 to V56";
-        case 57 -> result="Major version 57 : (13) September 2019 support V45 to V57";
-        case 58 -> result="Major version 58 : (14) March 2020 support V45 to V58";
-        case 59 -> result="Major version 59 : (15) September 2020 support V45 to V59";
-        case 60 -> result="Major version 60 : (16) March 2021 support V45 to V60";
-        case 61 -> result="Major version 61 : (17) September 2021 support V45 to V61";
-        case 62 -> result="Major version 62 : (18) March 2022 support V45 to V62";
-        case 63 -> result="Major version 63 : (19) September 2022 support V45 to V63";
-        case 64 -> result="Major version 64 : (20) March 2023 support V45 to V64";
-        case 65 -> result="Major version 65 : (21) September 2023 support V45 to V65";
-        case 66 -> result="Major version 66 : (22) March 2024 support V45 to V66";
+        case 45 -> result="Major version 45 : (jdk 1.1) February 1997 support V45 only";
+        case 46 -> result="Major version 46 : (jdk 1.2) December 1998 support V45 to V46";
+        case 47 -> result="Major version 47 : (jdk 1.3) May 2000 support V45 to V47";
+        case 48 -> result="Major version 48 : (jdk 1.4) February 2002 support V45 to V48";
+        case 49 -> result="Major version 49 : (jdk 5.0) September 2004 support V45 to V49";
+        case 50 -> result="Major version 50 : (jdk 6) December 2006 support V45 to V50";
+        case 51 -> result="Major version 51 : (jdk 7) July 2011 support V45 to V51";
+        case 52 -> result="Major version 52 : (jdk 8) March 2014 support V45 to V52";
+        case 53 -> result="Major version 53 : (jdk 9) September 2017 support V45 to V53";
+        case 54 -> result="Major version 54 : (jdk 10) March 2018 support V45 to V54";
+        case 55 -> result="Major version 55 : (jdk 11) September 2018 support V45 to V55";
+        case 56 -> result="Major version 56 : (jdk 12) March 2019 support V45 to V56";
+        case 57 -> result="Major version 57 : (jdk 13) September 2019 support V45 to V57";
+        case 58 -> result="Major version 58 : (jdk 14) March 2020 support V45 to V58";
+        case 59 -> result="Major version 59 : (jdk 15) September 2020 support V45 to V59";
+        case 60 -> result="Major version 60 : (jdk 16) March 2021 support V45 to V60";
+        case 61 -> result="Major version 61 : (jdk 17) September 2021 support V45 to V61";
+        case 62 -> result="Major version 62 : (jdk 18) March 2022 support V45 to V62";
+        case 63 -> result="Major version 63 : (jdk 19) September 2022 support V45 to V63";
+        case 64 -> result="Major version 64 : (jdk 20) March 2023 support V45 to V64";
+        case 65 -> result="Major version 65 : (jdk 21) September 2023 support V45 to V65";
+        case 66 -> result="Major version 66 : (jdk 22) March 2024 support V45 to V66";
         default ->result="Major version Unknown";
     }
     return result;
@@ -180,7 +181,7 @@ public class Tools {
      * @param flags
      * @return 
      ********************/
-    public String Methodes_ACMTab(int flags) {
+    public String Methodes_AFTab(int flags) {
         String result="";
         /*
 		ACC_PUBLIC 0x0001
@@ -212,17 +213,34 @@ public class Tools {
         return result;
     }
 
-    /*******************
+     /*******************
      * Get Next size bytes
+     * Lit les size octets suivants.
      * @param size
      * @return 
      *******************/
     public byte[] getNextBytes(int size){
-        byte[] local=new byte[size];
-        System.arraycopy(gbcm, idxP, local, 0, size);
-        idxP=idxP+size;
-        //System.out.println("idxP pos : "+idxP);
-        return local;
+        boolean DEBUG=true;
+        byte[] toread=new byte[size];
+        System.arraycopy(gbcm, idxP, toread, 0, size);
+        if (DEBUG) System.out.println(" idxP pos ("+idxP+"-"+(idxP+size)+") "); //si DEBUG
+        idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
+        return toread;
+    }
+    
+    /*******************
+     * Get Next size bytes
+     * Lit les size octets suivants.
+     * @param size
+     * @return 
+     *******************/
+    public byte[] getNextBytes(int size,String action){
+        boolean DEBUG=true;
+        byte[] toread=new byte[size];
+        System.arraycopy(gbcm, idxP, toread, 0, size);
+        if (DEBUG) System.out.println(" idxP pos ("+idxP+"-"+(idxP+size)+") : "+action+" "); //si DEBUG
+        idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
+        return toread;
     }
     
     /*******************
@@ -231,7 +249,7 @@ public class Tools {
     * @return
     *******************/
     public String getFileMagicNumber(byte[] magic){
-        //getmagic 0-3
+        //retour ASCII sasn espace et en minuscules
         return Hex(magic,false,false);
     }
     
@@ -241,6 +259,7 @@ public class Tools {
      * @return 
      ************************/
     public boolean testMagicNumber(String fileMagicNumber) {
+        //tester si les 4 premiers octets on pour transcription HEX en ASCII cafebabe
         return fileMagicNumber.compareToIgnoreCase("cafebabe")==0; 
     }
     

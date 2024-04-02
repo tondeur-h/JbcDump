@@ -82,7 +82,7 @@ Tools t;
     public void methodes_infos_print() {            
         for (Methods_info method_info:classFile.getMethods())
         {
-            System.out.println(" Access Flags : "+t.Methodes_ACMTab(method_info.getIaccess_flags()));
+            System.out.println(" Access Flags : "+t.Methodes_AFTab(method_info.getIaccess_flags()));
             System.out.print(extract_constant_pool_value(method_info.getIname_index()));
             System.out.println(extract_constant_pool_value(method_info.getIdescriptor_index()));
             

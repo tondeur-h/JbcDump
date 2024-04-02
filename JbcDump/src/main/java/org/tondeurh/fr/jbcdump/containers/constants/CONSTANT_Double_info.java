@@ -23,11 +23,9 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_Double_info {
 
 private byte[] high_bytes;
-private int ihigh_bytes;
-public byte high_bytes_size=4;    
+private int ihigh_bytes;    
 private byte[] low_bytes;
 private int ilow_bytes;
-public byte low_bytes_size=4; 
 
     public byte[] getHigh_bytes() {
         return high_bytes;

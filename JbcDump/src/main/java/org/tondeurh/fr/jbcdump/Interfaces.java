@@ -69,7 +69,7 @@ Tools t;
         //alloc array constant_pool object
         Interfaces_info int_info=new Interfaces_info();
        //lire le tag
-       int_info.setTag(t.getNextBytes(int_info.tag_size));
+       int_info.setTag(t.getNextBytes(1));
         int_info.setItag(t.Int(int_info.getTag()));
         switch(int_info.getItag())
         {

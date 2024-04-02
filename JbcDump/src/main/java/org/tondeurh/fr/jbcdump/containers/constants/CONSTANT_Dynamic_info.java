@@ -23,11 +23,9 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_Dynamic_info {
 
 private byte[] bootstrap_method_attr_index;
-private int ibootstrap_method_attr_index;
-public byte bootstrap_method_attr_index_size=2;    
+private int ibootstrap_method_attr_index;  
 private byte[] name_and_type_index;
 private int iname_and_type_index;
-public byte name_and_type_index_size=2; 
 
     public byte[] getBootstrap_method_attr_index() {
         return bootstrap_method_attr_index;

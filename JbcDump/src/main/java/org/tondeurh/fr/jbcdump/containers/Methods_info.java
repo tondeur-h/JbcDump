@@ -46,19 +46,15 @@ attribute_info attributes[attributes_count];
 public class Methods_info {
 private byte[] access_flags;
 private int iaccess_flags;
-public byte access_flags_size=2;
 
 private byte[] name_index;
 private int iname_index;
-public byte name_index_size=2;
 
 private byte[] descriptor_index;
 private int idescriptor_index;
-public byte descriptor_index_size=2;
 
 private byte[] attributes_count;
 private int iattributes_count;
-public byte attributes_count_size=2;
 private ArrayList <Attribute_info> attributes;
 
     public Methods_info() {

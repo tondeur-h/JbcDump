@@ -23,8 +23,7 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_Module_info {
 
 private byte[] name_index;
-private int iname_index;
-public byte name_index_size=2;    
+private int iname_index; 
 
     public byte[] getName_index() {
         return name_index;

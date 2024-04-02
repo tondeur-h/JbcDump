@@ -42,8 +42,8 @@ import org.tondeurh.fr.jbcdump.tools.Tools;
  * @author herve
  */
 public class ConstantPool {
-ClassFile classFile;
-Tools t;
+ClassFile classFile; //transmis
+Tools t; //transmmis
     
     /**
      *CONSTRUCTEUR
@@ -51,8 +51,8 @@ Tools t;
      * @param t
      */
     public ConstantPool(ClassFile classFile,Tools t) { 
-        this.classFile=classFile;
-        this.t=t;
+        this.classFile=classFile; //recup classFile
+        this.t=t; //recup Tools
     }
 
     /***************************
@@ -62,10 +62,10 @@ Tools t;
           
     for (int count_pool=0;count_pool<t.Int(classFile.getConstant_pool_count())-1;count_pool++)
     {
-        //alloc array constant_pool object
+        //allocate array constant_pool object
         CP_info cp_info=new CP_info(); 
-        //lire le tag
-        cp_info.setTag(t.getNextBytes(cp_info.tag_size));
+        //lire le tag sur 1 octet U1
+        cp_info.setTag(t.getNextBytes(1,"CP tag"));
         cp_info.setItag(t.Int(cp_info.getTag()));
         switch(cp_info.getItag())
         {
@@ -90,7 +90,7 @@ Tools t;
                 cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 3 -> {
-                cp_info.setConstant_name("CONSTANT_tools.Integer");//afecter le type de cp_info
+                cp_info.setConstant_name("CONSTANT_Integer");//afecter le type de cp_info
                 cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
             case 4 -> {
@@ -138,7 +138,7 @@ Tools t;
                 cp_info.setContainer(call_constant(cp_info.getItag()));//affecter l'objet
                 }
         }
-
+        //ajouter a la table(array) des CONSTANT_Pool de l'objet classFile
         classFile.getConstant_pool().add(cp_info);
     } //fin for
     }
@@ -163,7 +163,7 @@ Tools t;
             case 1->{ //CONSTANT_Utf8_info {u2 length;u1 bytes[length];}
                         CONSTANT_Utf8_info cci=new CONSTANT_Utf8_info();
                         //recup length
-                        cci.setLength(t.getNextBytes(cci.length_size));
+                        cci.setLength(t.getNextBytes(2));
                         cci.setIlength(t.Int(cci.getLength()));
                         //recup String
                         cci.setBytesString(t.getNextBytes(cci.getIlength()));
@@ -172,116 +172,115 @@ Tools t;
                     }  
             case 10->{ //CONSTANT_Methodref_info {u2 class_index;u2 name_and_type_index;}
                         CONSTANT_Methodref_info cci=new CONSTANT_Methodref_info();
-                        cci.setClass_index(t.getNextBytes(cci.class_index_size));
+                        cci.setClass_index(t.getNextBytes(2));
                         cci.setIclass_index(t.Int(cci.getClass_index()));
-                        cci.setName_and_type_index(t.getNextBytes(cci.name_and_type_index_size));
+                        cci.setName_and_type_index(t.getNextBytes(2));
                         cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     } 
             case 12->{ //CONSTANT_NameAndType_info {u2 name_index;u2 descriptor_index;}
                         CONSTANT_NameAndType_info cci=new CONSTANT_NameAndType_info();
-                        cci.setName_index(t.getNextBytes(cci.name_index_size));
+                        cci.setName_index(t.getNextBytes(2));
                         cci.setIname_index(t.Int(cci.getName_index()));
-                        cci.setDescriptor_index(t.getNextBytes(cci.descriptor_index_size));
+                        cci.setDescriptor_index(t.getNextBytes(2));
                         cci.setIdescriptor_index(t.Int(cci.getDescriptor_index()));
                         return cci;
                     } 
             case 9->{ //CONSTANT_Fieldref_info {u2 class_index;u2 name_and_type_index;}
                         CONSTANT_Fieldref_info cci=new CONSTANT_Fieldref_info();
-                        cci.setClass_index(t.getNextBytes(cci.class_index_size));
+                        cci.setClass_index(t.getNextBytes(2));
                         cci.setIclass_index(t.Int(cci.getClass_index()));
-                        cci.setName_and_type_index(t.getNextBytes(cci.name_and_type_index_size));
+                        cci.setName_and_type_index(t.getNextBytes(2));
                         cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     } 
             case 11->{ //CONSTANT_InterfaceMethodref_info {u2 class_index;u2 name_and_type_index;}
                         CONSTANT_InterfaceMethodref_info cci=new CONSTANT_InterfaceMethodref_info();
-                        cci.setClass_index(t.getNextBytes(cci.class_index_size));
+                        cci.setClass_index(t.getNextBytes(2));
                         cci.setIclass_index(t.Int(cci.getClass_index()));
-                        cci.setName_and_type_index(t.getNextBytes(cci.name_and_type_index_size));
+                        cci.setName_and_type_index(t.getNextBytes(2));
                         cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     } 
             case 8->{ //CONSTANT_String_info {u2 string_index;}
                         CONSTANT_String_info cci=new CONSTANT_String_info();
-                        cci.setString_index(t.getNextBytes(cci.string_index_size));
+                        cci.setString_index(t.getNextBytes(2));
                         cci.setIstring_index(t.Int(cci.getString_index()));
                         return cci;
                     } 
             case 3->{ //CONSTANT_Integer_info {u4 bytes;}
                         CONSTANT_Integer_info cci=new CONSTANT_Integer_info();
-                        cci.setBytes(t.getNextBytes(cci.bytes_size));
+                        cci.setBytes(t.getNextBytes(4));
                         cci.setIbytes(t.Int(cci.getBytes()));
                         return cci;
                     } 
             case 4->{ //CONSTANT_Float_info {u4 bytes;}
                         CONSTANT_Float_info cci=new CONSTANT_Float_info();
-                        cci.setBytes(t.getNextBytes(cci.bytes_size));
+                        cci.setBytes(t.getNextBytes(4));
                         cci.setIbytes(t.Int(cci.getBytes()));
                         return cci;
                     }
             case 5->{ //CONSTANT_Long_info {u4 high_bytes;u4 low_bytes;}
                         CONSTANT_Long_info cci=new CONSTANT_Long_info();
-                        cci.setHigh_bytes(t.getNextBytes(cci.high_bytes_size));
+                        cci.setHigh_bytes(t.getNextBytes(4));
                         cci.setIhigh_bytes(t.Int(cci.getHigh_bytes()));
-                        cci.setLow_bytes(t.getNextBytes(cci.low_bytes_size));
+                        cci.setLow_bytes(t.getNextBytes(4));
                         cci.setIlow_bytes(t.Int(cci.getLow_bytes()));
                         return cci;
                     }
             case 6->{ //CONSTANT_Double_info {u4 high_bytes;u4 low_bytes;}
                         CONSTANT_Double_info cci=new CONSTANT_Double_info();
-                        cci.setHigh_bytes(t.getNextBytes(cci.high_bytes_size));
+                        cci.setHigh_bytes(t.getNextBytes(4));
                         cci.setIhigh_bytes(t.Int(cci.getHigh_bytes()));
-                        cci.setLow_bytes(t.getNextBytes(cci.low_bytes_size));
+                        cci.setLow_bytes(t.getNextBytes(4));
                         cci.setIlow_bytes(t.Int(cci.getLow_bytes()));
                         return cci;
                     }
             case 15->{ //CONSTANT_MethodHandle_info {u1 reference_kind;u2 reference_index;}
                         CONSTANT_MethodHandle_info cci=new CONSTANT_MethodHandle_info();
-                        cci.setReference_kind(t.getNextBytes(cci.reference_kind_size));
+                        cci.setReference_kind(t.getNextBytes(1));
                         cci.setIreference_kind(t.Int(cci.getReference_kind()));
-                        cci.setReference_index(t.getNextBytes(cci.reference_index_size));
+                        cci.setReference_index(t.getNextBytes(2));
                         cci.setIreference_index(t.Int(cci.getReference_index()));
                         return cci;
                     }
             case 16->{ //CONSTANT_MethodType_info {u2 descriptor_index;}
                         CONSTANT_MethodType_info cci=new CONSTANT_MethodType_info();
-                        cci.setDescriptor_index(t.getNextBytes(cci.descriptor_index_size));
+                        cci.setDescriptor_index(t.getNextBytes(2));
                         cci.setIdescriptor_index(t.Int(cci.getDescriptor_index()));
                         return cci;
                     }
             case 17->{ //CONSTANT_Dynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
                         CONSTANT_Dynamic_info cci=new CONSTANT_Dynamic_info();
-                        cci.setBootstrap_method_attr_index(t.getNextBytes(cci.bootstrap_method_attr_index_size));
+                        cci.setBootstrap_method_attr_index(t.getNextBytes(2));
                         cci.setIbootstrap_method_attr_index(t.Int(cci.getBootstrap_method_attr_index()));
-                        cci.setName_and_type_index(t.getNextBytes(cci.name_and_type_index_size));
+                        cci.setName_and_type_index(t.getNextBytes(2));
                         cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     }
             case 18->{ //CONSTANT_InvokeDynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
                         CONSTANT_InvokeDynamic_info cci=new CONSTANT_InvokeDynamic_info();
-                        cci.setBootstrap_method_attr_index(t.getNextBytes(cci.bootstrap_method_attr_index_size));
+                        cci.setBootstrap_method_attr_index(t.getNextBytes(2));
                         cci.setIbootstrap_method_attr_index(t.Int(cci.getBootstrap_method_attr_index()));
-                        cci.setName_and_type_index(t.getNextBytes(cci.name_and_type_index_size));
+                        cci.setName_and_type_index(t.getNextBytes(2));
                         cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     }
             case 19->{ //CONSTANT_Module_info {u2 name_index;}
                         CONSTANT_Module_info cci=new CONSTANT_Module_info();
-                        cci.setName_index(t.getNextBytes(cci.name_index_size));
+                        cci.setName_index(t.getNextBytes(2));
                         cci.setIname_index(t.Int(cci.getName_index()));
                         return cci;
                     }
             case 20->{ //CONSTANT_Package_info {u2 name_index;}
                         CONSTANT_Package_info cci=new CONSTANT_Package_info();
-                        cci.setName_index(t.getNextBytes(cci.name_index_size));
+                        cci.setName_index(t.getNextBytes(2));
                         cci.setIname_index(t.Int(cci.getName_index()));
                         return cci;
                     }
-
         }
         
-        return "vide";
+        return null; //valeur ar defaut qui ne doit jamais être le cas.
     }
 
     /*
@@ -308,28 +307,29 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
     * Print constant pool
     *****************/
     public void constant_pool_print() {
-        int compteur=1;
-        boolean DEBUG=false;
+        int index=1; //index de la CONSTANT_pool (CP) commence a 1
+        boolean DEBUG=false; //pour le debug dev
+        //afficher chaque ligne de la CP
         for (CP_info cp_info:classFile.getConstant_pool())
         {
             //afficher le niveau cp_info
             if (DEBUG) System.out.print(" tag type : "+cp_info.getItag()+" ");
-            System.out.print("#"+compteur+"("+cp_info.getConstant_name()+") : ");
+            System.out.print("#"+index+"("+cp_info.getConstant_name()+") : ");
             
-            //afficher le contenu selon le type d'objet.
-            //Classes
+            //afficher le contenu selon le type d'objet retourné.
             if (cp_info.getContainer() instanceof CONSTANT_Class_info c)
-            {
+            { //CONSTANT_Class_info {u2 name_index;}
                System.out.println("#"+c.getIname_index()+" ["+resolve_constant_pool(c.getIname_index())+"]");
             }
             //Type Double Value
             if (cp_info.getContainer() instanceof CONSTANT_Double_info c)
-            {
-               System.out.println("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes()); 
+            { //CONSTANT_Double_info {u4 high_bytes;u4 low_bytes;}
+               System.out.println("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes());
+               //TODO resoudre la valeur DEC de cette constante Double
             }
             //type Dynamic
             if (cp_info.getContainer() instanceof CONSTANT_Dynamic_info c)
-            {
+            { //CONSTANT_Dynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
                System.out.println("#"+c.getIbootstrap_method_attr_index()+"."+
                        "#"+c.getIname_and_type_index()+
                        " ["+resolve_constant_pool(c.getIbootstrap_method_attr_index())+" "+
@@ -337,7 +337,7 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             }
             //réference de champs
             if (cp_info.getContainer() instanceof CONSTANT_Fieldref_info c)
-            {
+            { //CONSTANT_Fieldref_info {u2 class_index;u2 name_and_type_index;} 
                 System.out.println("#"+c.getIclass_index()+"."+
                         "#"+c.getIname_and_type_index()+
                 " ["+resolve_constant_pool(c.getIclass_index())+" "+
@@ -345,24 +345,26 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             }
             //constante de valeur
             if (cp_info.getContainer() instanceof CONSTANT_Float_info c)
-            {
+            { //CONSTANT_Float_info {u4 bytes;}
                System.out.println("#"+c.getIbytes()); 
+             //TODO resoudre la valeur DEC de cette constante Float
             }
             //constante de valeur
             if (cp_info.getContainer() instanceof CONSTANT_Integer_info c)
-            {
-               System.out.println("#"+c.getIbytes()); 
+            {  //CONSTANT_Integer_info {u4 bytes;}
+               System.out.println("#"+c.getIbytes());
+               //TODO resoudre la valeur DEC de cette constante Integer
             }
             //interface et Methode
             if (cp_info.getContainer() instanceof CONSTANT_InterfaceMethodref_info c)
-            {
+            { //CONSTANT_InterfaceMethodref_info {u2 class_index;u2 name_and_type_index;}
                System.out.println("#"+c.getIclass_index()+"."+"#"+c.getIname_and_type_index()+
                 " ["+resolve_constant_pool(c.getIclass_index())+" "+
                        resolve_constant_pool(c.getIname_and_type_index())+"]");
             }
             //Invoke Dynamic
             if (cp_info.getContainer() instanceof CONSTANT_InvokeDynamic_info c)
-            {
+            { //CONSTANT_InvokeDynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
                System.out.println("#"+c.getIbootstrap_method_attr_index()+"."+
                        "#"+c.getIname_and_type_index()+
                        " ["+resolve_constant_pool(c.getIbootstrap_method_attr_index())+" "+
@@ -370,25 +372,26 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             }
             //constante de valeur
             if (cp_info.getContainer() instanceof CONSTANT_Long_info c)
-            {
-               System.out.println("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes());                 
+            { //CONSTANT_Long_info {u4 high_bytes;u4 low_bytes;}
+               System.out.println("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes());
+               //TODO resoudre la valeur DEC de cette constante Long
             }
             //Method Handle
             if (cp_info.getContainer() instanceof CONSTANT_MethodHandle_info c)
-            {
+            { //CONSTANT_MethodHandle_info {u1 reference_kind;u2 reference_index;}
                System.out.println("#"+c.getIreference_kind()+"."+"#"+c.getIreference_index()+
                        " ["+resolve_constant_pool(c.getIreference_kind())+" "+
                        resolve_constant_pool(c.getIreference_index())+"]");
             }
             //MethodType
             if (cp_info.getContainer() instanceof CONSTANT_MethodType_info c)
-            {
+            { //CONSTANT_MethodType_info {u2 descriptor_index;}
                System.out.println("#"+c.getIdescriptor_index()+
                " ["+resolve_constant_pool(c.getIdescriptor_index())+"]"); 
             }
             //Method Ref
             if (cp_info.getContainer() instanceof CONSTANT_Methodref_info c)
-            {
+            { //CONSTANT_Methodref_info {u2 class_index;u2 name_and_type_index;}
                System.out.println("#"+c.getIclass_index()+"."+
                        "#"+c.getIname_and_type_index()+
                 " ["+resolve_constant_pool(c.getIclass_index())+" "+
@@ -396,13 +399,13 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             }
             //Module 
             if (cp_info.getContainer() instanceof CONSTANT_Module_info c)
-            {
+            { //CONSTANT_Module_info {u2 name_index;}
                 System.out.println("#"+c.getIname_index()+
                         " ["+resolve_constant_pool(c.getIname_index())+"]");
             }
             //Name and Type
             if (cp_info.getContainer() instanceof CONSTANT_NameAndType_info c)
-            {
+            {  //CONSTANT_NameAndType_info {u2 name_index;u2 descriptor_index;}
                 System.out.println("#"+c.getIname_index()+"."+
                         "#"+c.getIdescriptor_index()+
                         " ["+resolve_constant_pool(c.getIname_index())+" "+
@@ -410,21 +413,22 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             }
             //package
             if (cp_info.getContainer() instanceof CONSTANT_Package_info c)
-            {
+            { //CONSTANT_Package_info {u2 name_index;}
                 System.out.println("#"+c.getIname_index()+
                         " ["+resolve_constant_pool(c.getIname_index())+"]");
             }
             //String
             if (cp_info.getContainer() instanceof CONSTANT_String_info c)
-            {
-                System.out.println("#"+c.getIstring_index()+" ["+resolve_constant_pool(c.getIstring_index())+"]");
+            { //CONSTANT_String_info {u2 string_index;}
+                System.out.println("#"+c.getIstring_index()+
+                        " ["+resolve_constant_pool(c.getIstring_index())+"]");
             }
             //Terminaux Utf8
             if (cp_info.getContainer() instanceof CONSTANT_Utf8_info c)
-            {   
+            {  //CONSTANT_Utf8_info {u2 length;u1 bytes[length];}
                 System.out.println(c.getSbytesString());
             }
-           compteur++; 
+           index++; 
         }
     }
    
@@ -435,8 +439,11 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
      * @return
      ********************************/
     public String resolve_constant_pool(int index){
-        CP_info cpi=classFile.getConstant_pool().get(index-1);
-                    //recuperer la chaine
+        //TODO : resolve_constant_pool : A consolider 
+        //ne devrait retourner que des terminaux chaine de Car
+        //la resoltion recurrente ne fonctionne pas.
+        CP_info cpi=classFile.getConstant_pool().get(index-1); // on fait -1 pour car le tableau commence a 0
+            
             if (cpi.getContainer() instanceof CONSTANT_Class_info c)
             {resolve_constant_pool(c.getIname_index());}
             if (cpi.getContainer() instanceof CONSTANT_Double_info)
@@ -473,8 +480,10 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             if (cpi.getContainer() instanceof CONSTANT_Utf8_info c)
             {
         //si aucun cas ci dessus alors c'est un terminal
-        return ((CONSTANT_Utf8_info)cpi.getContainer()).getSbytesString();
+            //return ((CONSTANT_Utf8_info)cpi.getContainer()).getSbytesString();
+              return c.getSbytesString();
             }
+            //par defaut retourne le type de la CP
             return cpi.getConstant_name();
     }
     

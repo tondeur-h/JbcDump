@@ -24,11 +24,9 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_Fieldref_info {
 
 private byte[] class_index;
-private int iclass_index;
-public byte class_index_size=2;    
+private int iclass_index;  
 private byte[] name_and_type_index;
 private int iname_and_type_index;
-public byte name_and_type_index_size=2;
 
     public byte[] getClass_index() {
         return class_index;

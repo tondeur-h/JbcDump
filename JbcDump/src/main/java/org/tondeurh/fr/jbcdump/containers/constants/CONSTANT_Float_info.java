@@ -23,8 +23,7 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_Float_info {
 
 private byte[] bytes;
-private int ibytes;
-public byte bytes_size=4;    
+private int ibytes;   
 
     public byte[] getBytes() {
         return bytes;

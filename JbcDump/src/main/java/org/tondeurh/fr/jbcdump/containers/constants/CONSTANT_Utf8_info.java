@@ -24,7 +24,6 @@ public class CONSTANT_Utf8_info {
 
 private byte[] length;
 private int ilength;
-public byte length_size=2;
 private byte[] bytesString;
 private String sbytesString;
 
