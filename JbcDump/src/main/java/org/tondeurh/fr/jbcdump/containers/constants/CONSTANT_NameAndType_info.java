@@ -24,11 +24,9 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_NameAndType_info {
 
 private byte[] name_index;
-private int iname_index;
-public byte name_index_size=2;    
+private int iname_index;   
 private byte[] descriptor_index;
 private int idescriptor_index;
-public byte descriptor_index_size=2;
 
     public byte[] getName_index() {
         return name_index;

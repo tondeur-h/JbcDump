@@ -23,8 +23,7 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_MethodType_info {
 
 private byte[] descriptor_index;
-private int idescriptor_index;
-public byte descriptor_index_size=2;    
+private int idescriptor_index;  
 
     public byte[] getDescriptor_index() {
         return descriptor_index;

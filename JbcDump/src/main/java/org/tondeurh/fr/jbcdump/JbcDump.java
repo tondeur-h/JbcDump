@@ -44,7 +44,7 @@ public class JbcDump {
     byte[] byteCodeClassMem;
     //les options de la CLI
     Options options = new Options();
-    Tools t;
+    Tools t; //initialiser les tools des maintenant car utilisé ici 
     
     
     /***************
@@ -63,7 +63,7 @@ public class JbcDump {
     private void ligneOptions(String[] args)
     {
         try {
-        //path du fichier class
+        //path du fichier class option obligatoire
         Option fichierClass=Option.builder("f")
                 .hasArg(true)
                 .numberOfArgs(1)
@@ -76,6 +76,7 @@ public class JbcDump {
         //show Bytes Permet d'afficher le fichier sous format octets
         //selon une largeur d'octet au choix de l'utilisateur.
         //bloquer a max 64
+        //option optionnelle
         Option showByte=Option.builder("sb")
                 .hasArg(true)
                 .desc("Afficher les octets sur l'écran, entre 8 et 64 octets de largeur.")
@@ -86,6 +87,7 @@ public class JbcDump {
         options.addOption(showByte);
         
         //decompiler la classe 
+        //option optionnelle
         Option decompiler=Option.builder("d")
                 .hasArg(false)
                 .desc("Decompiler la classe.")
@@ -98,40 +100,47 @@ public class JbcDump {
         //traiter la ligne de commande
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
-          
+        
+        //traiter l'option file
         if (cmd.hasOption("f"))
             {
                 String path=cmd.getOptionValue("f");
-                if (!chargerClasse(path)){exitAndHelp("Chemin de la classe incorrect. option f");}
+                if (!chargerClasse(path)){exitAndHelp("Chemin de la classe incorrect.");}
                 else {
+                    //obligatoire ici car le fichier doit être chargé avant avec l'option f.
+                    //la classe est chargée, creer le pack tools
                     t=new Tools(byteCodeClassMem);
+                    //quelques calculs de ccksum pour le fun...
                     System.out.println("CHECKSUM MD5     : "+hashFileCode("MD5"));
                     System.out.println("CHECKSUM SHA 1   : "+hashFileCode("SHA-1"));
                     System.out.println("CHECKSUM SHA 256 : "+hashFileCode("SHA-256"));
                     System.out.println("CHECKSUM SHA 512 : "+hashFileCode("SHA-512"));
-                } //la classeest chargée, creer le pack tools
+                } 
             }
         
+        //traiter l'option sb pour l'affichage du fichiers en hexdécimal
         if (cmd.hasOption("sb"))
             {
-                int nbOctets=Integer.parseInt(cmd.getOptionValue("sb"),10);
+                int nbOctets=Integer.parseInt(cmd.getOptionValue("sb"),10); //nboctets demandés
                 if (nbOctets>64) exitAndHelp("Largeur de l'affichage en octets trop large, réduite la valeur");
                 if (nbOctets<8) exitAndHelp("Largeur de l'affichage en octets trop étroit, réduite la valeur");
                 //ok on affiche...
-                showBytes(nbOctets);
+                System.out.println(showBytes(nbOctets));
             }
-          
+        
+        //traiter l'option d => decomiler
         if (cmd.hasOption("d"))
             {
-                //decoder le fichier class
+                //decoder le fichier class => parser le fichier en objets 
                 Decode decoder=new Decode(t);
-                //ok decode le fichier...
+                //decode le fichier...
                 decoder.decodeClassFile();
             }
         
+        //futures options ???
         
         } catch (ParseException ex) {
-             //DEFAUT : une erreur s'est produite.
+             //DEFAUT : une erreur s'est produite car option inconnue ou mal rédigée.
             exitAndHelp(ex.getMessage());
         }
     }
@@ -149,7 +158,7 @@ public class JbcDump {
     /************************************
      * chargeur du bytecode de la classe
      * @param path
-     * @return
+     * @return boolean 
      ************************************/
     public boolean chargerClasse(String path)
     {
@@ -158,23 +167,23 @@ public class JbcDump {
         {
             exitAndHelp("fichier "+path+" non trouvé. Verifiez le chemin!");
         }
-        
-        DataInputStream dis=null;
+        //ok existe => GO
+        DataInputStream dis=null; //recomandé dans la documentation
         try {
-            //TODO
+            //chargement
             dis = new DataInputStream(new FileInputStream(path));
             System.out.println("Chargement en memoire : "+path);
             byteCodeClassMem=dis.readAllBytes();
             System.out.println("Taille du byteCode lu : "+byteCodeClassMem.length+" octets");
         } catch (FileNotFoundException ex) {
-            exitAndHelp(ex.getMessage());
+            exitAndHelp(ex.getMessage()); //si fichier non trouvé
         } catch (IOException ex) {
-            exitAndHelp(ex.getMessage());
+            exitAndHelp(ex.getMessage()); //si problème de lecture du fichier
         } finally {
             try {
                 dis.close();
             } catch (IOException ex) {
-            exitAndHelp(ex.getMessage());
+            exitAndHelp(ex.getMessage()); //si problème de fermeture du fichier...
             }
         }
         return true;        
@@ -202,7 +211,7 @@ public class JbcDump {
     /******************************
      * Afficher les octets à l'écran
      ******************************/
-    private void showBytes(int nbbytes) {
+    private String showBytes(int nbbytes) {
         int i;
         String result="";
         for (i=0; i < byteCodeClassMem.length; i++) 
@@ -213,37 +222,41 @@ public class JbcDump {
             result += Integer.toString((byteCodeClassMem[i] & 0xff)+0x100,16)
                     .substring( 1 )+" "; //espace séparateur entre chaque octet
         }
-        System.out.println(result);
+       return result;
     }
 
     /**********************
      * formater le compteur
-     * @param i
+     * lateral gauche sur x digits
+     * @param compteur
      * @param size
      * @return 
      **********************/
-    public String formatBCCounter(int i,int size) {
+    private String formatBCCounter(int compteur,int size) {
     StringBuilder sb = new StringBuilder();
-    for(int cpt=0; cpt<size; cpt++){sb.append("0");} //bourae de 0 par la gauche
-     String chaine=sb.toString()+Integer.toString(i, 10);
+    //construire une chaine de size de longeur de 0
+    //concatener la valeur du compteur et couper la chaine a la taille=size
+    for(int cpt=0; cpt<size; cpt++){sb.append("0");} //bourrage de 0 par la gauche
+     String chaine=sb.toString()+Integer.toString(compteur, 10);
      int len=chaine.length();
      chaine=chaine.substring(len-size);
      return chaine;
     }
 
-    /**
+    /********************************
      * calcule le HASH de l'encodage
      * @param encodage
      * @return
-     */
-    public String hashFileCode(String encodage){
+     ********************************/
+    private String hashFileCode(String encodage){
        byte[] hash = null; 
        try {
             MessageDigest digest = MessageDigest.getInstance(encodage);
             hash = digest.digest(byteCodeClassMem);
         } catch (NoSuchAlgorithmException ex) {
+            exitAndHelp(ex.getMessage()); //si problème de calcul du hash
           }
-        return t.Hex(hash, false, true);
+        return t.Hex(hash, false, true); //hexa séparépar un espace et en majuscules
    }
     
 }

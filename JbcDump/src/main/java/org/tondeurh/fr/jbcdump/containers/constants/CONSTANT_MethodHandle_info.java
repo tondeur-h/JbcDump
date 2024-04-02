@@ -24,11 +24,9 @@ package org.tondeurh.fr.jbcdump.containers.constants;
 public class CONSTANT_MethodHandle_info {
 
 private byte[] reference_kind;
-private int ireference_kind;
-public byte reference_kind_size=1;    
+private int ireference_kind;   
 private byte[] reference_index;
 private int ireference_index;
-public byte reference_index_size=2;
 
     public byte[] getReference_kind() {
         return reference_kind;

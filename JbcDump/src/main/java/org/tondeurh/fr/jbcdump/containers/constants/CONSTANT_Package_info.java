@@ -24,7 +24,6 @@ public class CONSTANT_Package_info {
 
 private byte[] name_index;
 private int iname_index;
-public byte name_index_size=2;    
 
     public byte[] getName_index() {
         return name_index;

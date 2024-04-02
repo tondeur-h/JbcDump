@@ -83,7 +83,7 @@ Tools t;
     public void fields_infos_print() {
          for (Fields_info field_info:classFile.getFields())
         {
-            System.out.println(" Access Flags : "+t.AFTab(field_info.getIaccess_flags()));
+            System.out.println(" Access Flags : "+t.Class_AFTab(field_info.getIaccess_flags()));
             System.out.print(extract_constant_pool_value(field_info.getIname_index()));
             System.out.println(extract_constant_pool_value(field_info.getIdescriptor_index()));
             

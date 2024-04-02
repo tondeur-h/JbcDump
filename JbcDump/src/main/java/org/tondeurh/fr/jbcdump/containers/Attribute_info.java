@@ -34,11 +34,9 @@ public class Attribute_info {
 
 private byte[] name_index;
 private int iname_index;
-public byte name_index_size=2;
 
 private byte[] attribute_length;
 private int iattribute_length;
-public byte attribute_length_size=4;
 private byte[] info;
 
     public byte[] getInfo() {

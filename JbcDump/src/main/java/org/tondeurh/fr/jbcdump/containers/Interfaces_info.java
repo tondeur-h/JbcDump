@@ -35,7 +35,6 @@ the source for the type.
 public class Interfaces_info {
  private byte[] tag;
 private int itag;
-public byte tag_size=1;
 private String constant_name;
 private CONSTANT_Class_info container;
 

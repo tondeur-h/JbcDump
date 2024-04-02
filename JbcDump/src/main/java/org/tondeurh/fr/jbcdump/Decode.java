@@ -24,8 +24,8 @@ import org.tondeurh.fr.jbcdump.tools.Tools;
  ***************/
 public class Decode {
     
+    Tools t; //transmis
     ClassFile classFile;
-    Tools t;
     ConstantPool cp;
     Interfaces it;
     Fields fi;
@@ -37,52 +37,60 @@ public class Decode {
      * @param t
      ***************/
     public Decode(Tools t) {
+    //construire les objets des classes du classFile
     classFile=new ClassFile();
     cp=new ConstantPool(classFile,t);
     it=new Interfaces(classFile,t);
     fi=new Fields(classFile,t);
     me=new Methodes(classFile, t);
     at=new Attributes(classFile, t);
-    this.t=t;
+    this.t=t; //transmettre le pointeur des tools
     }
    
     /************************
      * Decode ClassFile
- from memory 
+     * a partir du tab de byte 
+     * en mémoire.
      ************************/
     public void decodeClassFile()
     {
-        //recuperer le nombre magique du fichier...
+        //recuperer le nombre magique du fichier, les 4 premiers octets
         classFile.setMagic(t.getNextBytes(4));
         //tester le nbre magique avant de continuer est ce le bon format?
+        //c'est la seule vérificaton que l'on fait ici, bien que la documentation
+        //indique d'autres éléments à checker!
                 if (!t.testMagicNumber(t.Hex(classFile.getMagic(),false,false)))
                 {
-                    t.exit("Ce n'est pas le bon format de fichier...");
+                    t.exit("Ce n'est pas le bon format de fichier..."); //bye bye
                 }
         
-        //decode les versions major et minor
-        classFile.setMinor_version(t.getNextBytes(2));//4-5
-        classFile.setMajor_version(t.getNextBytes(2));//6-7
+        //decode les versions majeure et mineure
+        //on ne fra pas de contrôles de cohérences du contenu.
+        //sur 2 octets pour chacun
+        classFile.setMinor_version(t.getNextBytes(2));
+        classFile.setMajor_version(t.getNextBytes(2));
         
-        //nb of constant pool string ?
-        classFile.setConstant_pool_count(t.getNextBytes(2));//8-9
+        //nombre d'elements CONSTANT_Pool
+        classFile.setConstant_pool_count(t.getNextBytes(2));
         
+        //un peut d'affichages
         System.out.println("Magic number : "+t.Hex(classFile.getMagic(),false,true));
         System.out.println("Major version : "+t.Int(classFile.getMajor_version()));
-        System.out.println(t.MVTab(classFile.getMajor_version()));
+        //convertir le numero de version majeur en chaine explicative.
+        System.out.println(t.Versions_VTab(classFile.getMajor_version()));
         System.out.println("Minor version : "+t.Int(classFile.getMinor_version()));
         
         System.out.println("------------CONSTANTS POOL------------");
         System.out.println("constant pool count : "+t.Int(classFile.getConstant_pool_count()));
         
-        //lire la table constant pool 
+        //Decoder la table CONSTANT_pool 
         cp.constant_pool_read();
         cp.constant_pool_print();
         
         System.out.println("------------------------");
         //access FLAGS
         classFile.setAccess_flags(t.getNextBytes(2));
-        System.out.println("Access FlagS : "+t.AFTab(t.Int(classFile.getAccess_flags())));
+        System.out.println("Access FlagS : "+t.Class_AFTab(t.Int(classFile.getAccess_flags())));
         
         //this class
         classFile.setThis_class(t.getNextBytes(2));

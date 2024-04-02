@@ -37,9 +37,10 @@ public class CP_info {
     
 private byte[] tag;
 private int itag;
-public byte tag_size=1;
 private String constant_name;
 private Object container;
+private String translateString; //pas dans la documentation mais permet de resoudre la notion de terminal
+
 //selon le type de tag la valeur a collecter va changer
 /*
 Ex  constant_name               tag classe
@@ -61,6 +62,14 @@ X   CONSTANT_InvokeDynamic      18  CONSTANT_InvokeDynamic_info {u2 bootstrap_me
 X   CONSTANT_Module             19  CONSTANT_Module_info {u2 name_index;}
 X   CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
 */
+
+    public String getTranslateString() {
+        return translateString;
+    }
+
+    public void setTranslateString(String translateString) {
+        this.translateString = translateString;
+    }
 
     public Object getContainer() {
         return container;

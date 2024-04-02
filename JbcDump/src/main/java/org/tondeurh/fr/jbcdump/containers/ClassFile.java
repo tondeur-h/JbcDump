@@ -44,31 +44,20 @@ attribute_info attributes[attributes_count];
 public class ClassFile {
  
 private byte[] magic; //u4
-public final byte magic_size=4;
 private byte[] minor_version; //u2
-public final byte minor_version_size=2;
 private byte[] major_version; //u2
-public final byte major_version_size=2;
 private byte[] constant_pool_count; //u2
-public final byte constant_pool_count_size=2;
 private ArrayList<CP_info> constant_pool; //cp_info constant_pool[constant_pool_count-1]
 private byte[] access_flags; //u2
-public final byte access_flags_size=2;
 private byte[] this_class; //u2
-public final byte this_class_size=2;
 private byte[] super_class; //u2
-public final byte super_class_size=2;
 private byte[] interfaces_count; //u2
-public final byte interfaces_count_size=2;
 private ArrayList<Interfaces_info> interfaces; //interfaces_info interfaces[interfaces_count]
 private byte[] fields_count; //u2
-public final byte fields_count_size=2;
 private ArrayList<Fields_info> fields; //field_info fields[fields_count] 
 private byte[] methods_count; //u2
-public final byte methods_count_size=2;
 private ArrayList<Methods_info> methods; //method_info methods[methods_count]
 private byte[] attributes_count; //u2
-public final byte attributes_count_size=2;
 private ArrayList<Attribute_info> attributes; //attribute_info attributes[attributes_count]
 
 /************************
