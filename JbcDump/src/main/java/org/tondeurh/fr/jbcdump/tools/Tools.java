@@ -97,7 +97,7 @@ public class Tools {
         if (space) result+=" "; //si espace attendu
         if (upcase) result=result.toUpperCase(); //si upercase attendu.
         }
-        return result;
+        return result.trim();
     }
 
     /**************************
@@ -213,7 +213,7 @@ public class Tools {
         return result;
     }
 
-    /*******************
+     /*******************
      * Get Next size bytes
      * Lit les size octets suivants.
      * @param size
@@ -223,8 +223,24 @@ public class Tools {
         boolean DEBUG=true;
         byte[] toread=new byte[size];
         System.arraycopy(gbcm, idxP, toread, 0, size);
+        if (DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size)+") "); //si DEBUG
         idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
-        if (DEBUG) System.out.print(" idxP pos ("+idxP+"-"+idxP+size+") "); //si DEBUG
+        return toread;
+    }
+    
+    /*******************
+     * Get Next size bytes
+     * Lit les size octets suivants.
+     * @param size
+     * @param action
+     * @return 
+     *******************/
+    public byte[] getNextBytes(int size,String action){
+        boolean DEBUG=true;
+        byte[] toread=new byte[size];
+        System.arraycopy(gbcm, idxP, toread, 0, size);
+        if (DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size-1)+") : "+action+" ["+Hex(toread, true, true)+"]"); //si DEBUG
+        idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
         return toread;
     }
     

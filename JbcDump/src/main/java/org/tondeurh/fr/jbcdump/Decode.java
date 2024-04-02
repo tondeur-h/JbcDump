@@ -55,7 +55,7 @@ public class Decode {
     public void decodeClassFile()
     {
         //recuperer le nombre magique du fichier, les 4 premiers octets
-        classFile.setMagic(t.getNextBytes(4));
+        classFile.setMagic(t.getNextBytes(4,"Magic number"));
         //tester le nbre magique avant de continuer est ce le bon format?
         //c'est la seule vérificaton que l'on fait ici, bien que la documentation
         //indique d'autres éléments à checker!
@@ -67,15 +67,15 @@ public class Decode {
         //decode les versions majeure et mineure
         //on ne fra pas de contrôles de cohérences du contenu.
         //sur 2 octets pour chacun
-        classFile.setMinor_version(t.getNextBytes(2));
-        classFile.setMajor_version(t.getNextBytes(2));
+        classFile.setMinor_version(t.getNextBytes(2,"minor version"));
+        classFile.setMajor_version(t.getNextBytes(2,"major version"));
         
         //nombre d'elements CONSTANT_Pool
-        classFile.setConstant_pool_count(t.getNextBytes(2));
+        classFile.setConstant_pool_count(t.getNextBytes(2,"CP count"));
         
         //un peut d'affichages
         System.out.println("Magic number : "+t.Hex(classFile.getMagic(),false,true));
-        System.out.println("Major version : "+t.Int(classFile.getMajor_version()));
+        //System.out.println("Major version : "+t.Int(classFile.getMajor_version()));
         //convertir le numero de version majeur en chaine explicative.
         System.out.println(t.Versions_VTab(classFile.getMajor_version()));
         System.out.println("Minor version : "+t.Int(classFile.getMinor_version()));
@@ -89,20 +89,20 @@ public class Decode {
         
         System.out.println("------------------------");
         //access FLAGS
-        classFile.setAccess_flags(t.getNextBytes(2));
+        classFile.setAccess_flags(t.getNextBytes(2,"Access flags"));
         System.out.println("Access FlagS : "+t.Class_AFTab(t.Int(classFile.getAccess_flags())));
         
         //this class
-        classFile.setThis_class(t.getNextBytes(2));
+        classFile.setThis_class(t.getNextBytes(2,"This Class"));
         System.out.println("This Class : #"+t.Int(classFile.getThis_class()));
         
         //super class
-        classFile.setSuper_class(t.getNextBytes(2));
+        classFile.setSuper_class(t.getNextBytes(2,"Super Class"));
         System.out.println("Super Class : #"+t.Int(classFile.getSuper_class()));
           
         System.out.println("------------INTERFACES------------");
         //Interfaces count
-        classFile.setInterfaces_count(t.getNextBytes(2));
+        classFile.setInterfaces_count(t.getNextBytes(2,"Interfaces count"));
         System.out.println("interfaces count : "+t.Int(classFile.getInterfaces_count()));
         
         //interfaces_info interfaces[interfaces_count];
@@ -114,7 +114,7 @@ public class Decode {
         
         System.out.println("------------FIELDS------------");
         //u2 fields_count;
-        classFile.setFields_count(t.getNextBytes(2));
+        classFile.setFields_count(t.getNextBytes(2,"Fields count"));
         System.out.println("Fields count : "+t.Int(classFile.getFields_count()));
         
         //field_info fields[fields_count];
@@ -126,7 +126,7 @@ public class Decode {
   
         System.out.println("------------METHODS------------");
         //u2 methods_count;
-        classFile.setMethods_count(t.getNextBytes(2));
+        classFile.setMethods_count(t.getNextBytes(2,"Methods count"));
         System.out.println("Methods count : "+t.Int(classFile.getMethods_count()));
         
         //method_info methods[methods_count];
@@ -138,7 +138,7 @@ public class Decode {
 
         System.out.println("------------ATTRIBUTES------------");
         //u2 attributes_count;
-        classFile.setAttributes_count(t.getNextBytes(2));
+        classFile.setAttributes_count(t.getNextBytes(2,"Attributes count"));
         System.out.println("Attributes count : "+t.Int(classFile.getAttributes_count()));
 
 
