@@ -69,10 +69,7 @@ public class Decode {
         //sur 2 octets pour chacun
         classFile.setMinor_version(t.getNextBytes(2,"minor version"));
         classFile.setMajor_version(t.getNextBytes(2,"major version"));
-        
-        //nombre d'elements CONSTANT_Pool
-        classFile.setConstant_pool_count(t.getNextBytes(2,"CP count"));
-        
+
         //un peut d'affichages
         System.out.println("Magic number : "+t.Hex(classFile.getMagic(),false,true));
         //System.out.println("Major version : "+t.Int(classFile.getMajor_version()));
@@ -81,6 +78,8 @@ public class Decode {
         System.out.println("Minor version : "+t.Int(classFile.getMinor_version()));
         
         System.out.println("------------CONSTANTS POOL------------");
+        //nombre d'elements CONSTANT_Pool
+        classFile.setConstant_pool_count(t.getNextBytes(2,"CP count"));
         System.out.println("constant pool count : "+t.Int(classFile.getConstant_pool_count()));
         
         //Decoder la table CONSTANT_pool 
@@ -94,12 +93,14 @@ public class Decode {
         
         //this class
         classFile.setThis_class(t.getNextBytes(2,"This Class"));
-        System.out.println("This Class : #"+t.Int(classFile.getThis_class()));
+        System.out.print("This Class : #"+t.Int(classFile.getThis_class())+" ");
+        System.out.println(cp.resolve_constant_pool(t.Int(classFile.getThis_class())));
         
         //super class
         classFile.setSuper_class(t.getNextBytes(2,"Super Class"));
-        System.out.println("Super Class : #"+t.Int(classFile.getSuper_class()));
-          
+        System.out.print("Super Class : #"+t.Int(classFile.getSuper_class())+" ");
+        System.out.println(cp.resolve_constant_pool(t.Int(classFile.getSuper_class())));  
+        
         System.out.println("------------INTERFACES------------");
         //Interfaces count
         classFile.setInterfaces_count(t.getNextBytes(2,"Interfaces count"));
@@ -109,7 +110,7 @@ public class Decode {
        if (t.Int(classFile.getInterfaces_count())>0)
        {
            it.interfaces_infos_read();
-           it.interfaces_infos_print();
+           it.interfaces_infos_print(cp);
        }
         
         System.out.println("------------FIELDS------------");

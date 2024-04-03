@@ -36,6 +36,7 @@ import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Package_info;
 import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_String_info;
 import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Utf8_info;
 import org.tondeurh.fr.jbcdump.tools.Tools;
+import org.tondeurh.fr.jbcdump.tools.constantes;
 
 /**
  *
@@ -308,12 +309,11 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
     *****************/
     public void constant_pool_print() {
         int index=1; //index de la CONSTANT_pool (CP) commence a 1
-        boolean DEBUG=false; //pour le debug dev
         //afficher chaque ligne de la CP
         for (CP_info cp_info:classFile.getConstant_pool())
         {
             //afficher le niveau cp_info
-            if (DEBUG) System.out.print(" tag type : "+cp_info.getItag()+" ");
+            if (constantes.DEBUG) System.out.print(" tag type : "+cp_info.getItag()+" ");
             System.out.print("#"+index+"("+cp_info.getConstant_name()+") : ");
             
             //afficher le contenu selon le type d'objet retourné.
@@ -324,8 +324,12 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             //Type Double Value
             if (cp_info.getContainer() instanceof CONSTANT_Double_info c)
             { //CONSTANT_Double_info {u4 high_bytes;u4 low_bytes;}
-               System.out.println("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes());
-               //TODO resoudre la valeur DEC de cette constante Double
+               System.out.print("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes()+" DEC Double:");
+               long bits=((long)c.getIhigh_bytes()<<32)+c.getIlow_bytes();
+               int s=((bits >> 63)==0)?1:-1;
+               int e=(int) ((bits >>52) & 0x7ffL);
+               long m=(e==0)?(bits & 0xfffffffffffffL)<<1:(bits & 0xfffffffffffffL) | 0x10000000000000L;
+                System.out.println(s*m*2^(e-1075));
             }
             //type Dynamic
             if (cp_info.getContainer() instanceof CONSTANT_Dynamic_info c)
@@ -346,14 +350,16 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             //constante de valeur
             if (cp_info.getContainer() instanceof CONSTANT_Float_info c)
             { //CONSTANT_Float_info {u4 bytes;}
-               System.out.println("#"+c.getIbytes()); 
-             //TODO resoudre la valeur DEC de cette constante Float
+               System.out.print("#"+c.getIbytes()+" DEC Float: ");
+               int s=((c.getIbytes()>>31)==0) ? 1:-1;
+               int e=((c.getIbytes()>>23) & 0xff);
+               int m=(e==0) ?(c.getIbytes() & 0x7fffff) <<1 :(c.getIbytes() & 0x7fffff) | 0x800000;
+               System.out.println(s*m*2^(e-150));
             }
             //constante de valeur
             if (cp_info.getContainer() instanceof CONSTANT_Integer_info c)
             {  //CONSTANT_Integer_info {u4 bytes;}
-               System.out.println("#"+c.getIbytes());
-               //TODO resoudre la valeur DEC de cette constante Integer
+               System.out.print("#"+c.getIbytes()+" DEC Int: "+c.getIbytes());
             }
             //interface et Methode
             if (cp_info.getContainer() instanceof CONSTANT_InterfaceMethodref_info c)
@@ -373,8 +379,8 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
             //constante de valeur
             if (cp_info.getContainer() instanceof CONSTANT_Long_info c)
             { //CONSTANT_Long_info {u4 high_bytes;u4 low_bytes;}
-               System.out.println("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes());
-               //TODO resoudre la valeur DEC de cette constante Long
+               System.out.print("#"+c.getIhigh_bytes()+"."+c.getIlow_bytes()+" DEC Long: ");
+                System.out.println(((long)c.getIhigh_bytes()<<32+c.getIlow_bytes()));
             }
             //Method Handle
             if (cp_info.getContainer() instanceof CONSTANT_MethodHandle_info c)
@@ -440,51 +446,77 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
      ********************************/
     public String resolve_constant_pool(int index){
         //TODO : resolve_constant_pool : A consolider 
-        //ne devrait retourner que des terminaux chaine de Car
-        //la resoltion recurrente ne fonctionne pas.
+        //coupe une branche quand 2 sections disponible.
         CP_info cpi=classFile.getConstant_pool().get(index-1); // on fait -1 pour car le tableau commence a 0
             
             if (cpi.getContainer() instanceof CONSTANT_Class_info c)
-            {resolve_constant_pool(c.getIname_index());}
+            {return resolve_constant_pool(c.getIname_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Double_info)
             {return "";}
+            
             if (cpi.getContainer() instanceof CONSTANT_Dynamic_info c)
-            {resolve_constant_pool(c.getIname_and_type_index());}
+            {return resolve_constant_pool(c.getIname_and_type_index());}
+            if (cpi.getContainer() instanceof CONSTANT_Dynamic_info c)
+            {return resolve_constant_pool(c.getIbootstrap_method_attr_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Fieldref_info c)
-            {resolve_constant_pool(c.getIclass_index());}
+            {return resolve_constant_pool(c.getIclass_index());}
+            if (cpi.getContainer() instanceof CONSTANT_Fieldref_info c)
+            {return resolve_constant_pool(c.getIname_and_type_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Float_info)
             {return "";}
+            
             if (cpi.getContainer() instanceof CONSTANT_Integer_info)
             {return "";}
+            
             if (cpi.getContainer() instanceof CONSTANT_InterfaceMethodref_info c)
-            {resolve_constant_pool(c.getIclass_index());}
+            {return resolve_constant_pool(c.getIclass_index());}
+            if (cpi.getContainer() instanceof CONSTANT_InterfaceMethodref_info c)
+            {return resolve_constant_pool(c.getIname_and_type_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_InvokeDynamic_info c)
-            {resolve_constant_pool(c.getIbootstrap_method_attr_index());}
+            {return resolve_constant_pool(c.getIbootstrap_method_attr_index());}
+            if (cpi.getContainer() instanceof CONSTANT_InvokeDynamic_info c)
+            {return resolve_constant_pool(c.getIname_and_type_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Long_info)
             {return "";}
+            
             if (cpi.getContainer() instanceof CONSTANT_MethodHandle_info c)
-            {resolve_constant_pool(c.getIreference_index());}
+            {return resolve_constant_pool(c.getIreference_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_MethodType_info c)
-            {resolve_constant_pool(c.getIdescriptor_index());}
+            {return resolve_constant_pool(c.getIdescriptor_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Methodref_info c)
-            {resolve_constant_pool(c.getIclass_index());}
+            {return resolve_constant_pool(c.getIclass_index());}
+            if (cpi.getContainer() instanceof CONSTANT_Methodref_info c)
+            {return resolve_constant_pool(c.getIname_and_type_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Module_info c)
-            {resolve_constant_pool(c.getIname_index());}
+            {return resolve_constant_pool(c.getIname_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_NameAndType_info c)
-            {resolve_constant_pool(c.getIname_index());}
+            {return resolve_constant_pool(c.getIname_index());}
+            if (cpi.getContainer() instanceof CONSTANT_NameAndType_info c)
+            {return resolve_constant_pool(c.getIdescriptor_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_Package_info c)
-            {resolve_constant_pool(c.getIname_index());}
+            {return resolve_constant_pool(c.getIname_index());}
+            
             if (cpi.getContainer() instanceof CONSTANT_String_info c)
-            {resolve_constant_pool(c.getIstring_index());}
+            {return resolve_constant_pool(c.getIstring_index());}
             
             if (cpi.getContainer() instanceof CONSTANT_Utf8_info c)
             {
-        //si aucun cas ci dessus alors c'est un terminal
+            //si aucun cas ci dessus alors c'est un terminal
             //return ((CONSTANT_Utf8_info)cpi.getContainer()).getSbytesString();
               return c.getSbytesString();
             }
             //par defaut retourne le type de la CP
-            return cpi.getConstant_name();
+            return "zz";
     }
-    
+      
 }

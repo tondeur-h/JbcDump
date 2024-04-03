@@ -91,6 +91,7 @@ Tools t;
             {
                 System.out.print(extract_constant_pool_value(ai.getIname_index())+" ");
                 System.out.println("["+t.Hex(ai.getInfo(), true, true)+"]");
+                System.out.println("");
             }
         } 
     }

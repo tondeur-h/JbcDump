@@ -220,10 +220,9 @@ public class Tools {
      * @return 
      *******************/
     public byte[] getNextBytes(int size){
-        boolean DEBUG=true;
         byte[] toread=new byte[size];
         System.arraycopy(gbcm, idxP, toread, 0, size);
-        if (DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size)+") "); //si DEBUG
+        if (constantes.DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size)+") "); //si DEBUG
         idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
         return toread;
     }
@@ -236,10 +235,9 @@ public class Tools {
      * @return 
      *******************/
     public byte[] getNextBytes(int size,String action){
-        boolean DEBUG=true;
         byte[] toread=new byte[size];
         System.arraycopy(gbcm, idxP, toread, 0, size);
-        if (DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size-1)+") : "+action+" ["+Hex(toread, true, true)+"]"); //si DEBUG
+        if (constantes.DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size-1)+") : "+action+" ["+Hex(toread, true, true)+"]"); //si DEBUG
         idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
         return toread;
     }
