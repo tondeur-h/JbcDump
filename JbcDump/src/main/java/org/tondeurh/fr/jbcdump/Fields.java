@@ -36,7 +36,7 @@ Tools t;
      * des fields_infos.
      **************************/
     public void fields_infos_read() {
-        for (int count_pool=0;count_pool<t.Int(classFile.getFields_count());count_pool++)
+        for (int count_pool=0;count_pool<t.Int2(classFile.getFields_count());count_pool++)
     {
         /*
         field_info {
@@ -50,13 +50,13 @@ Tools t;
         Fields_info field_info=new Fields_info();
         //convertir access_flags
         field_info.setAccess_flags(t.getNextBytes(2));
-        field_info.setIaccess_flags(t.Int(field_info.getAccess_flags()));
+        field_info.setIaccess_flags(t.Int2(field_info.getAccess_flags()));
         field_info.setName_index(t.getNextBytes(2));
-        field_info.setIname_index(t.Int(field_info.getName_index()));
+        field_info.setIname_index(t.Int2(field_info.getName_index()));
         field_info.setDescriptor_index(t.getNextBytes(2));
-        field_info.setIdescriptor_index(t.Int(field_info.getDescriptor_index()));
+        field_info.setIdescriptor_index(t.Int2(field_info.getDescriptor_index()));
         field_info.setAttributes_count(t.getNextBytes(2));
-        field_info.setIattributes_count(t.Int(field_info.getAttributes_count()));
+        field_info.setIattributes_count(t.Int2(field_info.getAttributes_count()));
   
         //attribute_info attributes[attributes_count] renseigner  
         field_info.setAttributes(iterate_attributes(field_info.getIattributes_count()));
@@ -117,9 +117,9 @@ Tools t;
         {
             Attribute_info ai=new Attribute_info(); //1 attribute_info
             ai.setName_index(t.getNextBytes(2));
-            ai.setIname_index(t.Int(ai.getName_index()));
+            ai.setIname_index(t.Int2(ai.getName_index()));
             ai.setAttribute_length(t.getNextBytes(4));
-            ai.setIattribute_length(t.Int(ai.getAttribute_length()));
+            ai.setIattribute_length(t.Int2(ai.getAttribute_length()));
             
         //get u1 info
         ai.setInfo(t.getNextBytes(ai.getIattribute_length()));

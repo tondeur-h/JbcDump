@@ -42,7 +42,7 @@ Tools t;
         u1 info[attribute_length];
         }
         */
-        classFile.setAttributes(iterate_attributes(t.Int(classFile.getAttributes_count())));
+        classFile.setAttributes(iterate_attributes(t.Int2(classFile.getAttributes_count())));
     }
     
     /**
@@ -64,7 +64,7 @@ Tools t;
             {
                 System.out.print(extract_constant_pool_value(ai.getIname_index())+" ");
                 //System.out.println("["+t.Hex(ai.getInfo(), true, true)+"]");
-                System.out.println(extract_constant_pool_info(t.Int(ai.getInfo())));
+                System.out.println(extract_constant_pool_info(t.Int2(ai.getInfo())));
             }       
     }
                        
@@ -89,9 +89,9 @@ Tools t;
         {
             Attribute_info ai=new Attribute_info(); //1 attribute_info
             ai.setName_index(t.getNextBytes(2));
-            ai.setIname_index(t.Int(ai.getName_index()));
+            ai.setIname_index(t.Int2(ai.getName_index()));
             ai.setAttribute_length(t.getNextBytes(4));
-            ai.setIattribute_length(t.Int(ai.getAttribute_length()));
+            ai.setIattribute_length(t.Int2(ai.getAttribute_length()));
             
         //get u1 info
         ai.setInfo(t.getNextBytes(ai.getIattribute_length()));
@@ -119,5 +119,5 @@ Tools t;
     {
         return ((CONSTANT_Utf8_info)classFile.getConstant_pool().get(index_constant_pool-1).getContainer()).getSbytesString();
     }
-    
+     
 }

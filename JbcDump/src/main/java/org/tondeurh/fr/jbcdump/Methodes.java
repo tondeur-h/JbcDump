@@ -22,6 +22,7 @@ import org.tondeurh.fr.jbcdump.containers.ClassFile;
 import org.tondeurh.fr.jbcdump.tools.Tools;
 import org.tondeurh.fr.jbcdump.containers.Methods_info;
 import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Utf8_info;
+import org.tondeurh.fr.jbcdump.tools.Attributes_decode;
 
 /**
  *
@@ -30,13 +31,14 @@ import org.tondeurh.fr.jbcdump.containers.constants.CONSTANT_Utf8_info;
 public class Methodes {
 ClassFile classFile;
 Tools t;
+    Attributes_decode ad;
 
     /**************************
      * alimenter le tableau
      * des methodes_infos.
      **************************/
     public void methodes_infos_read() {
-        for (int count_pool=0;count_pool<t.Int(classFile.getMethods_count());count_pool++)
+        for (int count_pool=0;count_pool<t.Int2(classFile.getMethods_count());count_pool++)
     {
        /*method_info {
 			u2 access_flags;
@@ -49,13 +51,13 @@ Tools t;
         Methods_info method_info=new Methods_info();
         //convertir access_flags
         method_info.setAccess_flags(t.getNextBytes(2));
-        method_info.setIaccess_flags(t.Int(method_info.getAccess_flags()));
+        method_info.setIaccess_flags(t.Int2(method_info.getAccess_flags()));
         method_info.setName_index(t.getNextBytes(2));
-        method_info.setIname_index(t.Int(method_info.getName_index()));
+        method_info.setIname_index(t.Int2(method_info.getName_index()));
         method_info.setDescriptor_index(t.getNextBytes(2));
-        method_info.setIdescriptor_index(t.Int(method_info.getDescriptor_index()));
+        method_info.setIdescriptor_index(t.Int2(method_info.getDescriptor_index()));
         method_info.setAttributes_count(t.getNextBytes(2));
-        method_info.setIattributes_count(t.Int(method_info.getAttributes_count()));
+        method_info.setIattributes_count(t.Int2(method_info.getAttributes_count()));
   
         //attribute_info attributes[attributes_count] renseigner  
         method_info.setAttributes(iterate_attributes(method_info.getIattributes_count()));
@@ -72,7 +74,8 @@ Tools t;
      */
     public Methodes(ClassFile classFile,Tools t) {
         this.classFile=classFile;
-        this.t=t;  
+        this.t=t; 
+        ad=new Attributes_decode(t);
     }
   
     /***********************
@@ -88,10 +91,16 @@ Tools t;
             
             for (Attribute_info ai:method_info.getAttributes())
             {
-                System.out.print(extract_constant_pool_value(ai.getIname_index())+" ");
-                System.out.println("["+t.Hex(ai.getInfo(), true, true)+"]"); //<= traduire la séquence "info" en bytecode
-                System.out.println("");
-            }
+                System.out.println(extract_constant_pool_value(ai.getIname_index())+" ");
+                //decoder le type d'attributes.
+                switch (extract_constant_pool_value(ai.getIname_index()).trim())
+                {
+                    case "Code" -> 
+                    {
+                         ad.decode_CODE(ai.getInfo());
+                    }
+                } //fin switch
+            } //fin for
         }         
     }
                        
@@ -116,9 +125,9 @@ Tools t;
         {
             Attribute_info ai=new Attribute_info(); //1 attribute_info
             ai.setName_index(t.getNextBytes(2));
-            ai.setIname_index(t.Int(ai.getName_index()));
+            ai.setIname_index(t.Int2(ai.getName_index()));
             ai.setAttribute_length(t.getNextBytes(4));
-            ai.setIattribute_length(t.Int(ai.getAttribute_length()));
+            ai.setIattribute_length(t.Int4(ai.getAttribute_length()));
             
         //get u1 info
         ai.setInfo(t.getNextBytes(ai.getIattribute_length()));

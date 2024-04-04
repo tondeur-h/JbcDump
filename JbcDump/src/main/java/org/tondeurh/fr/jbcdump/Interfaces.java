@@ -70,13 +70,13 @@ Tools t; //transmis
     public void interfaces_infos_read() {
         //must be a CONSTANT_Class_Info <=> Tag=7
                 
-    for (int count_interfaces=0;count_interfaces<t.Int(classFile.getInterfaces_count());count_interfaces++)
+    for (int count_interfaces=0;count_interfaces<t.Int2(classFile.getInterfaces_count());count_interfaces++)
     {
         //alloc array Interfaces_info object
         Interfaces_info int_info=new Interfaces_info();
        //lire le tag
        int_info.setTag(t.getNextBytes(1));
-       int_info.setItag(t.Int(int_info.getTag()));
+       int_info.setItag(t.Int2(int_info.getTag()));
        int_info.setConstant_name("CONSTANT_Class");//afecter le type de cp_info
        int_info.setContainer(call_constant());//affecter l'objet
        classFile.getInterfaces().add(int_info);
@@ -94,7 +94,7 @@ Tools t; //transmis
         //CONSTANT_Class_info {u2 name_index;}
         CONSTANT_Class_info cci=new CONSTANT_Class_info();
         cci.setName_index(t.getNextBytes(2));
-        cci.setIname_index(t.Int(cci.getName_index()));
+        cci.setIname_index(t.Int2(cci.getName_index()));
         return cci;
     }
 
