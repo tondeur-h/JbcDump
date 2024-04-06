@@ -55,7 +55,7 @@ public class Opcodes {
                 case 18 -> {
                     System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc #"+Int(code[(pc+1)]));
                     pc++; //+ 1 byte
-                }//TODO
+                }
                 case 19 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc_w");}//TODO
                 case 20 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc2_w");}//TODO
                 //load
@@ -233,7 +233,7 @@ public class Opcodes {
                 case 182 -> {
                     System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"invokevirtual #"+Int(code[(pc+1)],code[(pc+2)]));
                     pc=pc+4;
-                }//TODO
+                }
                 case 183 -> {
                     System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"invokespecial #"+Int(code[(pc+1)],code[(pc+2)]));
                     pc=pc+2;
