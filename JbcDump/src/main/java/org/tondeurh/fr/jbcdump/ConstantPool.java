@@ -61,13 +61,13 @@ Tools t; //transmmis
      ***************************/
     public void constant_pool_read() {
           
-    for (int count_pool=0;count_pool<t.Int2(classFile.getConstant_pool_count())-1;count_pool++)
+    for (int count_pool=0;count_pool<t.Int(classFile.getConstant_pool_count())-1;count_pool++)
     {
         //allocate array constant_pool object
         CP_info cp_info=new CP_info(); 
         //lire le tag sur 1 octet U1
         cp_info.setTag(t.getNextBytes(1,"CP tag"));
-        cp_info.setItag(t.Int1(cp_info.getTag()));
+        cp_info.setItag(t.Int(cp_info.getTag()));
         switch(cp_info.getItag())
         {
             case 7 -> {
@@ -158,14 +158,14 @@ Tools t; //transmmis
             case 7->{ //CONSTANT_Class_info {u2 name_index}
                         CONSTANT_Class_info cci=new CONSTANT_Class_info();
                         cci.setName_index(t.getNextBytes(2,"CONSTANT_Class_info {u2 name_index}"));
-                        cci.setIname_index(t.Int2(cci.getName_index()));
+                        cci.setIname_index(t.Int(cci.getName_index()));
                         return cci;
                     }      
             case 1->{ //CONSTANT_Utf8_info {u2 length;u1 bytes[length];}
                         CONSTANT_Utf8_info cci=new CONSTANT_Utf8_info();
                         //recup length
                         cci.setLength(t.getNextBytes(2,"CONSTANT_Utf8_info {u2 length}"));
-                        cci.setIlength(t.Int2(cci.getLength()));
+                        cci.setIlength(t.Int(cci.getLength()));
                         //recup String
                         cci.setBytesString(t.getNextBytes(cci.getIlength(),"CONSTANT_Utf8_info {u1 bytes[length]}"));
                         cci.setSbytesString(t.Str(cci.getBytesString()));
@@ -174,109 +174,109 @@ Tools t; //transmmis
             case 10->{ //CONSTANT_Methodref_info {u2 class_index;u2 name_and_type_index;}
                         CONSTANT_Methodref_info cci=new CONSTANT_Methodref_info();
                         cci.setClass_index(t.getNextBytes(2,"CONSTANT_Methodref_info {u2 class_index}"));
-                        cci.setIclass_index(t.Int2(cci.getClass_index()));
+                        cci.setIclass_index(t.Int(cci.getClass_index()));
                         cci.setName_and_type_index(t.getNextBytes(2,"CONSTANT_Methodref_info {u2 name_and_type_index}"));
-                        cci.setIname_and_type_index(t.Int2(cci.getName_and_type_index()));
+                        cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     } 
             case 12->{ //CONSTANT_NameAndType_info {u2 name_index;u2 descriptor_index;}
                         CONSTANT_NameAndType_info cci=new CONSTANT_NameAndType_info();
                         cci.setName_index(t.getNextBytes(2,"CONSTANT_NameAndType_info {u2 name_index}"));
-                        cci.setIname_index(t.Int2(cci.getName_index()));
+                        cci.setIname_index(t.Int(cci.getName_index()));
                         cci.setDescriptor_index(t.getNextBytes(2,"CONSTANT_NameAndType_info {u2 descriptor_index}"));
-                        cci.setIdescriptor_index(t.Int2(cci.getDescriptor_index()));
+                        cci.setIdescriptor_index(t.Int(cci.getDescriptor_index()));
                         return cci;
                     } 
             case 9->{ //CONSTANT_Fieldref_info {u2 class_index;u2 name_and_type_index;}
                         CONSTANT_Fieldref_info cci=new CONSTANT_Fieldref_info();
                         cci.setClass_index(t.getNextBytes(2,"CONSTANT_Fieldref_info {u2 class_index}"));
-                        cci.setIclass_index(t.Int2(cci.getClass_index()));
+                        cci.setIclass_index(t.Int(cci.getClass_index()));
                         cci.setName_and_type_index(t.getNextBytes(2,"CONSTANT_Fieldref_info {u2 name_and_type_index}"));
-                        cci.setIname_and_type_index(t.Int2(cci.getName_and_type_index()));
+                        cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     } 
             case 11->{ //CONSTANT_InterfaceMethodref_info {u2 class_index;u2 name_and_type_index;}
                         CONSTANT_InterfaceMethodref_info cci=new CONSTANT_InterfaceMethodref_info();
                         cci.setClass_index(t.getNextBytes(2,"CONSTANT_InterfaceMethodref_info {u2 class_index}"));
-                        cci.setIclass_index(t.Int2(cci.getClass_index()));
+                        cci.setIclass_index(t.Int(cci.getClass_index()));
                         cci.setName_and_type_index(t.getNextBytes(2,"CONSTANT_InterfaceMethodref_info {u2 name_and_type_index}"));
-                        cci.setIname_and_type_index(t.Int2(cci.getName_and_type_index()));
+                        cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     } 
             case 8->{ //CONSTANT_String_info {u2 string_index;}
                         CONSTANT_String_info cci=new CONSTANT_String_info();
                         cci.setString_index(t.getNextBytes(2,"CONSTANT_String_info {u2 string_index}"));
-                        cci.setIstring_index(t.Int2(cci.getString_index()));
+                        cci.setIstring_index(t.Int(cci.getString_index()));
                         return cci;
                     } 
             case 3->{ //CONSTANT_Integer_info {u4 bytes;}
                         CONSTANT_Integer_info cci=new CONSTANT_Integer_info();
                         cci.setBytes(t.getNextBytes(4,"CONSTANT_Integer_info {u4 bytes}"));
-                        cci.setIbytes(t.Int4(cci.getBytes()));
+                        cci.setIbytes(t.Int(cci.getBytes()));
                         return cci;
                     } 
             case 4->{ //CONSTANT_Float_info {u4 bytes;}
                         CONSTANT_Float_info cci=new CONSTANT_Float_info();
                         cci.setBytes(t.getNextBytes(4,"CONSTANT_Float_info {u4 bytes}"));
-                        cci.setIbytes(t.Int4(cci.getBytes()));
+                        cci.setIbytes(t.Int(cci.getBytes()));
                         return cci;
                     }
             case 5->{ //CONSTANT_Long_info {u4 high_bytes;u4 low_bytes;}
                         CONSTANT_Long_info cci=new CONSTANT_Long_info();
                         cci.setHigh_bytes(t.getNextBytes(4,"CONSTANT_Long_info {u4 high_bytes}"));
-                        cci.setIhigh_bytes(t.Int4(cci.getHigh_bytes()));
+                        cci.setIhigh_bytes(t.Int(cci.getHigh_bytes()));
                         cci.setLow_bytes(t.getNextBytes(4,"CONSTANT_Long_info {u4 low_bytes}"));
-                        cci.setIlow_bytes(t.Int4(cci.getLow_bytes()));
+                        cci.setIlow_bytes(t.Int(cci.getLow_bytes()));
                         return cci;
                     }
             case 6->{ //CONSTANT_Double_info {u4 high_bytes;u4 low_bytes;}
                         CONSTANT_Double_info cci=new CONSTANT_Double_info();
                         cci.setHigh_bytes(t.getNextBytes(4,"CONSTANT_Double_info {u4 high_bytes}"));
-                        cci.setIhigh_bytes(t.Int4(cci.getHigh_bytes()));
+                        cci.setIhigh_bytes(t.Int(cci.getHigh_bytes()));
                         cci.setLow_bytes(t.getNextBytes(4,"CONSTANT_Double_info {u4 low_bytes}"));
-                        cci.setIlow_bytes(t.Int4(cci.getLow_bytes()));
+                        cci.setIlow_bytes(t.Int(cci.getLow_bytes()));
                         return cci;
                     }
             case 15->{ //CONSTANT_MethodHandle_info {u1 reference_kind;u2 reference_index;}
                         CONSTANT_MethodHandle_info cci=new CONSTANT_MethodHandle_info();
                         cci.setReference_kind(t.getNextBytes(1,"CONSTANT_MethodHandle_info {u1 reference_kind}"));
-                        cci.setIreference_kind(t.Int1(cci.getReference_kind()));
+                        cci.setIreference_kind(t.Int(cci.getReference_kind()));
                         cci.setReference_index(t.getNextBytes(2,"CONSTANT_MethodHandle_info {u2 reference_index}"));
-                        cci.setIreference_index(t.Int2(cci.getReference_index()));
+                        cci.setIreference_index(t.Int(cci.getReference_index()));
                         return cci;
                     }
             case 16->{ //CONSTANT_MethodType_info {u2 descriptor_index;}
                         CONSTANT_MethodType_info cci=new CONSTANT_MethodType_info();
                         cci.setDescriptor_index(t.getNextBytes(2,"CONSTANT_MethodType_info {u2 descriptor_index}"));
-                        cci.setIdescriptor_index(t.Int2(cci.getDescriptor_index()));
+                        cci.setIdescriptor_index(t.Int(cci.getDescriptor_index()));
                         return cci;
                     }
             case 17->{ //CONSTANT_Dynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
                         CONSTANT_Dynamic_info cci=new CONSTANT_Dynamic_info();
                         cci.setBootstrap_method_attr_index(t.getNextBytes(2,"CONSTANT_Dynamic_info {u2 bootstrap_method_attr_index}"));
-                        cci.setIbootstrap_method_attr_index(t.Int2(cci.getBootstrap_method_attr_index()));
+                        cci.setIbootstrap_method_attr_index(t.Int(cci.getBootstrap_method_attr_index()));
                         cci.setName_and_type_index(t.getNextBytes(2,"CONSTANT_Dynamic_info {u2 name_and_type_index}"));
-                        cci.setIname_and_type_index(t.Int2(cci.getName_and_type_index()));
+                        cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     }
             case 18->{ //CONSTANT_InvokeDynamic_info {u2 bootstrap_method_attr_index;u2 name_and_type_index;}
                         CONSTANT_InvokeDynamic_info cci=new CONSTANT_InvokeDynamic_info();
                         cci.setBootstrap_method_attr_index(t.getNextBytes(2,"CONSTANT_InvokeDynamic_info {u2 bootstrap_method_attr_index}"));
-                        cci.setIbootstrap_method_attr_index(t.Int2(cci.getBootstrap_method_attr_index()));
+                        cci.setIbootstrap_method_attr_index(t.Int(cci.getBootstrap_method_attr_index()));
                         cci.setName_and_type_index(t.getNextBytes(2,"CONSTANT_InvokeDynamic_info {u2 name_and_type_index}"));
-                        cci.setIname_and_type_index(t.Int2(cci.getName_and_type_index()));
+                        cci.setIname_and_type_index(t.Int(cci.getName_and_type_index()));
                         return cci;
                     }
             case 19->{ //CONSTANT_Module_info {u2 name_index;}
                         CONSTANT_Module_info cci=new CONSTANT_Module_info();
                         cci.setName_index(t.getNextBytes(2,"CONSTANT_Module_info {u2 name_index}"));
-                        cci.setIname_index(t.Int2(cci.getName_index()));
+                        cci.setIname_index(t.Int(cci.getName_index()));
                         return cci;
                     }
             case 20->{ //CONSTANT_Package_info {u2 name_index;}
                         CONSTANT_Package_info cci=new CONSTANT_Package_info();
                         cci.setName_index(t.getNextBytes(2,"CONSTANT_Package_info {u2 name_index}"));
-                        cci.setIname_index(t.Int2(cci.getName_index()));
+                        cci.setIname_index(t.Int(cci.getName_index()));
                         return cci;
                     }
         }

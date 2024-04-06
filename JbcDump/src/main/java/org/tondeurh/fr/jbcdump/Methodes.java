@@ -38,7 +38,7 @@ Tools t;
      * des methodes_infos.
      **************************/
     public void methodes_infos_read() {
-        for (int count_pool=0;count_pool<t.Int2(classFile.getMethods_count());count_pool++)
+        for (int count_pool=0;count_pool<t.Int(classFile.getMethods_count());count_pool++)
     {
        /*method_info {
 			u2 access_flags;
@@ -51,13 +51,13 @@ Tools t;
         Methods_info method_info=new Methods_info();
         //convertir access_flags
         method_info.setAccess_flags(t.getNextBytes(2));
-        method_info.setIaccess_flags(t.Int2(method_info.getAccess_flags()));
+        method_info.setIaccess_flags(t.Int(method_info.getAccess_flags()));
         method_info.setName_index(t.getNextBytes(2));
-        method_info.setIname_index(t.Int2(method_info.getName_index()));
+        method_info.setIname_index(t.Int(method_info.getName_index()));
         method_info.setDescriptor_index(t.getNextBytes(2));
-        method_info.setIdescriptor_index(t.Int2(method_info.getDescriptor_index()));
+        method_info.setIdescriptor_index(t.Int(method_info.getDescriptor_index()));
         method_info.setAttributes_count(t.getNextBytes(2));
-        method_info.setIattributes_count(t.Int2(method_info.getAttributes_count()));
+        method_info.setIattributes_count(t.Int(method_info.getAttributes_count()));
   
         //attribute_info attributes[attributes_count] renseigner  
         method_info.setAttributes(iterate_attributes(method_info.getIattributes_count()));
@@ -125,9 +125,9 @@ Tools t;
         {
             Attribute_info ai=new Attribute_info(); //1 attribute_info
             ai.setName_index(t.getNextBytes(2));
-            ai.setIname_index(t.Int2(ai.getName_index()));
+            ai.setIname_index(t.Int(ai.getName_index()));
             ai.setAttribute_length(t.getNextBytes(4));
-            ai.setIattribute_length(t.Int4(ai.getAttribute_length()));
+            ai.setIattribute_length(t.Int(ai.getAttribute_length()));
             
         //get u1 info
         ai.setInfo(t.getNextBytes(ai.getIattribute_length()));

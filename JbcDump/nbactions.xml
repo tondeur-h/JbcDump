@@ -12,7 +12,7 @@
             <properties>
                 <exec.vmArgs></exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
-                <exec.appArgs>-f C:\Users\tondeur-h\OneDrive\Echanges\dev\JbcDump\test\jtest.class -d</exec.appArgs>
+                <exec.appArgs>-f C:\Users\herve\OneDrive\Echanges\dev\JbcDump\test\jtest.class -d</exec.appArgs>
                 <exec.mainClass>org.tondeurh.fr.jbcdump.JbcDump</exec.mainClass>
                 <exec.executable>java</exec.executable>
             </properties>
@@ -29,7 +29,7 @@
             <properties>
                 <exec.vmArgs>-agentlib:jdwp=transport=dt_socket,server=n,address=${jpda.address}</exec.vmArgs>
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
-                <exec.appArgs>-f C:\Users\tondeur-h\OneDrive\Echanges\dev\JbcDump\test\jtest.class -d</exec.appArgs>
+                <exec.appArgs>-f C:\Users\herve\OneDrive\Echanges\dev\JbcDump\test\jtest.class -d</exec.appArgs>
                 <exec.mainClass>org.tondeurh.fr.jbcdump.JbcDump</exec.mainClass>
                 <exec.executable>java</exec.executable>
                 <jpda.listen>true</jpda.listen>
@@ -49,7 +49,7 @@
                 <exec.args>${exec.vmArgs} -classpath %classpath ${exec.mainClass} ${exec.appArgs}</exec.args>
                 <exec.mainClass>org.tondeurh.fr.jbcdump.JbcDump</exec.mainClass>
                 <exec.executable>java</exec.executable>
-                <exec.appArgs>-f C:\Users\tondeur-h\OneDrive\Echanges\dev\JbcDump\test\jtest.class -d</exec.appArgs>
+                <exec.appArgs>-f C:\Users\herve\OneDrive\Echanges\dev\JbcDump\test\jtest.class -d</exec.appArgs>
             </properties>
         </action>
     </actions>

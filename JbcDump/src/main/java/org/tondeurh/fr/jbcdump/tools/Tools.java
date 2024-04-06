@@ -100,17 +100,19 @@ public class Tools {
         return result.trim();
     }
 
-    /**************************
-     * convertir byte2 to Integer
+
+        /**************************
+     * convertir byte1 to Integer
      * @param hexa
      * @return 
      **************************/
     public int Int(byte[] hexa) {
-         int value = 0;
-         for (byte b : hexa) {value = (value << 8) + (b & 0xFF);}
-         return value;
+     if (hexa.length==1){return hexa[0] & 0xFF;}
+     if (hexa.length==2){return (hexa[0] & 0xFF) << 8 | (hexa[1] & 0xFF);}
+     if (hexa.length==4){return hexa[0] << 24 | (hexa[1] & 0xFF) << 16 | (hexa[2] & 0xFF) << 8 | (hexa[3] & 0xFF);}
+     return 0; //par defaut...
     }
-
+        
      /**************************
      * convertir bytes to String
      * @param hexa
@@ -239,6 +241,22 @@ public class Tools {
         System.arraycopy(gbcm, idxP, toread, 0, size);
         if (constantes.DEBUG) System.out.println("[DEBUG] idxP pos ("+idxP+"-"+(idxP+size-1)+") : "+action+" ["+Hex(toread, true, true)+"]"); //si DEBUG
         idxP=idxP+size; //bouge le compteur de position dans la lecture du tableau d'octets
+        return toread;
+    }
+    
+        /*******************
+     * Get Next size bytes
+     * Lit les size octets suivants.
+     * @param bits
+     * @param from
+     * @param size
+     * @param action
+     * @return 
+     *******************/
+    public byte[] getNextBytesFrom(byte[] bits, int from,int size,String action){
+        byte[] toread=new byte[size];
+        System.arraycopy(bits, from, toread, 0, size);
+        if (constantes.DEBUG) System.out.println("[DEBUG] from pos ("+from+"-"+(from+size-1)+") : "+action+" ["+Hex(toread, true, true)+"]"); //si DEBUG
         return toread;
     }
     
