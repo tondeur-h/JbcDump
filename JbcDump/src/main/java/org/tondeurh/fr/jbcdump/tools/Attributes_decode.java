@@ -31,8 +31,6 @@ public class Attributes_decode {
         this.t=t;
     }
   
-    
-    
     /*******************************
      * Decoder l'attribut CODE.
      * @param info 
