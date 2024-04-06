@@ -85,6 +85,8 @@ public class Attributes_decode {
         ac.setCode(t.getNextBytesFrom(info,idxLoc,ac.getIcode_length(), "BYTECODE"));
         //TODO : decoder les opcodes
         System.out.println("OPCODE : "+t.Hex(ac.getCode(),true,true));
+        Opcodes opcodes=new Opcodes();
+        opcodes.decode_opcodes(ac.getCode());
         
         idxLoc=idxLoc+ac.getIcode_length();
        //  u2 exception_table_length;
