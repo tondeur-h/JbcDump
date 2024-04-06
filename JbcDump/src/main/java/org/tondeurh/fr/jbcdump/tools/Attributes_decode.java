@@ -83,8 +83,7 @@ public class Attributes_decode {
         idxLoc=idxLoc+4;
         //ByteCode
         ac.setCode(t.getNextBytesFrom(info,idxLoc,ac.getIcode_length(), "BYTECODE"));
-        //TODO : decoder les opcodes
-        System.out.println("OPCODE : "+t.Hex(ac.getCode(),true,true));
+        System.out.println("OPCODE HEX : "+t.Hex(ac.getCode(),true,true));
         Opcodes opcodes=new Opcodes();
         opcodes.decode_opcodes(ac.getCode());
         
