@@ -71,17 +71,20 @@ public class Attributes_decode {
         ac.setMax_stack(t.getNextBytesFrom(info,idxLoc,2, "max_stack"));
         ac.setImax_stack(t.Int(ac.getMax_stack()));
         idxLoc=idxLoc+2;
+        System.out.println("Max Stack : "+ac.getImax_stack());
         //max_locals
         ac.setMax_locals(t.getNextBytesFrom(info,idxLoc,2, "max_locals"));
         ac.setImax_locals(t.Int(ac.getMax_locals()));
         idxLoc=idxLoc+2;
+        System.out.println("Max Locals : "+ac.getImax_locals());
         //code_length
         ac.setCode_length(t.getNextBytesFrom(info,idxLoc,4, "code_length"));
         ac.setIcode_length(t.Int(ac.getCode_length()));
         idxLoc=idxLoc+4;
+        System.out.println("Opcode length : "+ac.getIcode_length());
         //ByteCode
         ac.setCode(t.getNextBytesFrom(info,idxLoc,ac.getIcode_length(), "BYTECODE"));
-        System.out.println("OPCODE HEX : "+t.Hex(ac.getCode(),true,true));
+        System.out.println("OPCODE HEX : ["+t.Hex(ac.getCode(),true,true)+"]");
         Opcodes opcodes=new Opcodes();
         opcodes.decode_opcodes(ac.getCode());
         
@@ -91,8 +94,7 @@ public class Attributes_decode {
        ac.setIexception_table_length(t.Int(ac.getException_table_length()));
        //Ne pas lire les exceptions pour l'instant...
        idxLoc=idxLoc+(ac.getIexception_table_length()*8);
-       ac.setAttributes_count(t.getNextBytesFrom(info, idxLoc, 2, "Attributes Count"));
-       
+       //ac.setAttributes_count(t.getNextBytesFrom(info, idxLoc, 2, "Attributes Count"));
     }
     
 }

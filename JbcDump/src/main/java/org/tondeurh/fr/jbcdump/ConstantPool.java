@@ -445,7 +445,7 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
      * @return
      ********************************/
     public String resolve_constant_pool(int index){
-        //TODO : resolve_constant_pool : A consolider 
+        if (index<1) return "#0-unknown"; //index non reconnu!
         //coupe une branche quand 2 sections disponible.
         CP_info cpi=classFile.getConstant_pool().get(index-1); // on fait -1 pour car le tableau commence a 0
             
@@ -516,7 +516,7 @@ CONSTANT_Package            20  CONSTANT_Package_info {u2 name_index;}
               return c.getSbytesString();
             }
             //par defaut retourne le type de la CP
-            return "zz";
+            return "undetermined";
     }
       
 }
