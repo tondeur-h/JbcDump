@@ -50,28 +50,47 @@ public class Opcodes {
                 case 13 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fconst_2");} //no parameters
                 case 14 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dconst_0");} //no parameters
                 case 15 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dconst_1");} //no parameters
-                case 16 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"bipush");}//TODO
-                case 17 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"sipush");}//TODO
+                case 16 -> {
+                    System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"bipush #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 17 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"sipush #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
                 case 18 -> {
                     System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc #"+Int(code[(pc+1)]));
                     pc++; //+ 1 byte
                 }
-                case 19 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc_w");}//TODO
-                case 20 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc2_w");}//TODO
+                case 19 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc_w #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 20 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ldc2_w #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
                 //load
-                case 21 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iload");}//TODO
-                case 22 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload");}//TODO
-                case 23 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fload");}//TODO
-                case 24 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dload");}//TODO
-                case 25 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"aload");}//TODO
+                case 21 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iload #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 22 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 23 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fload #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 24 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dload #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 25 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"aload #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
                 case 26 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iload_0");} //no parameters
                 case 27 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iload_1");} //no parameters
                 case 28 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iload_2");} //no parameters
                 case 29 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iload_3");} //no parameters
-                case 30 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_0");}//TODO
-                case 31 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_1");}//TODO
-                case 32 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_2");}//TODO
-                case 33 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_3");}//TODO
+                case 30 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_0");} //no parameters
+                case 31 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_1");} //no parameters
+                case 32 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_2");} //no parameters
+                case 33 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lload_3");} //no parameters
                 case 34 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fload_0");} //no parameters
                 case 35 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fload_1");} //no parameters
                 case 36 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fload_2");} //no parameters
@@ -93,11 +112,21 @@ public class Opcodes {
                 case 52 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"caload");} //no parameters
                 case 53 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"saload");} //no parameters
                 //store
-                case 54 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"istore");}//TODO
-                case 55 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lstore");}//TODO
-                case 56 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fstore");}//TODO
-                case 57 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dstore");}//TODO
-                case 58 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"astore");}//TODO
+                case 54 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"istore #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 55 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lstore #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 56 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fstore #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 57 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dstore #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
+                case 58 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"astore #"+Int(code[(pc+1)]));        
+                    pc++;
+                    }
                 case 59 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"istore_0");} //no parameters
                 case 60 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"istore_1");} //no parameters
                 case 61 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"istore_2");} //no parameters
@@ -173,7 +202,9 @@ public class Opcodes {
                 case 129 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lor");} //no parameters
                 case 130 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ixor");} //no parameters
                 case 131 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lxor");} //no parameters
-                case 132 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iinc");}//TODO
+                case 132 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iinc #"+Int(code[(pc+1)])+",#"+Int(code[(pc+2)]));
+                    pc=pc+2;
+                }
                 //conversions
                 case 133 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"i2l");} //no parameters
                 case 134 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"i2f");} //no parameters
@@ -196,24 +227,56 @@ public class Opcodes {
                 case 150 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"fcmpg");} //no parameters
                 case 151 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dcmpl");} //no parameters
                 case 152 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"dcmpg");} //no parameters
-                case 153 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifeq");}//TODO
-                case 154 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifne");}//TODO
-                case 155 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iflt");}//TODO
-                case 156 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifge");}//TODO
-                case 157 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifgt");}//TODO
-                case 158 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifle");}//TODO
-                case 159 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpeq");}//TODO
-                case 160 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpne");}//TODO
-                case 161 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmplt");}//TODO
-                case 162 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpge");}//TODO
-                case 163 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpgt");}//TODO
-                case 164 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmple");}//TODO
-                case 165 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_acmpeq");}//TODO
-                case 166 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_acmpne");}//TODO
+                case 153 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifeq #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 154 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifne #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 155 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"iflt #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 156 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifge #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 157 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifgt #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 158 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ifle #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 159 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpeq #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 160 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpne #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 161 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmplt #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 162 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpge #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 163 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmpgt #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 164 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_icmple #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 165 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_acmpeq #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 166 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"if_acmpne #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
                 //controls
                 case 167 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"goto");}//TODO
-                case 168 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"jsr");}//TODO
-                case 169 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ret");}//TODO
+                case 168 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"jsr #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 169 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ret #"+Int(code[(pc+1)]));
+                    pc++;
+                }
                 case 170 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"tableswitch");}//TODO
                 case 171 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"lookupswitch");}//TODO
                 case 172 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"ireturn");} //no parameters
@@ -227,9 +290,15 @@ public class Opcodes {
                     System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"getstatic #"+Int(code[(pc+1)],code[(pc+2)]));
                     pc=pc+2;
                 }
-                case 179 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"putstatic");}//TODO
-                case 180 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"getfield");}//TODO
-                case 181 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"putfield");}//TODO
+                case 179 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"putstatic #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 180 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"getfield #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
+                case 181 -> {System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"putfield #"+Int(code[(pc+1)],code[(pc+2)]));
+                    pc=pc+2;
+                }
                 case 182 -> {
                     System.out.println("#"+compteur+"("+pc+"_0x"+intToHex(code[(pc)])+"):"+"invokevirtual #"+Int(code[(pc+1)],code[(pc+2)]));
                     pc=pc+4;
