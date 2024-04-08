@@ -95,6 +95,7 @@ public class Attributes_decode {
        //Ne pas lire les exceptions pour l'instant...
        idxLoc=idxLoc+(ac.getIexception_table_length()*8);
        //ac.setAttributes_count(t.getNextBytesFrom(info, idxLoc, 2, "Attributes Count"));
+       //TODO : decoder suite attributes (METHODES)
     }
     
 }
