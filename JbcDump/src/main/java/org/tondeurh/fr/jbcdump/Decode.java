@@ -146,6 +146,9 @@ public class Decode {
         //attribute_info attributes[attributes_count];
         if (t.Int(classFile.getAttributes_count())>0)
        {
+           System.out.println("Implementation en attente...");
+           //TODO : DEcoder attributes end files
+           System.exit(0);
            at.attributes_infos_read();
            at.attributes_infos_print();
        }  
